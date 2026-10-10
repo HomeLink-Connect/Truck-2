@@ -2,103 +2,53 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#0B3D91">
-<title>FleetCommand | Fleet &amp; Cross-Border Management</title>
+<title>FleetCommand Driver</title>
 <script>
 /* If another app's service worker controls this address, remove it once so FleetCommand loads itself. */
 (function(){if(!('serviceWorker' in navigator))return;navigator.serviceWorker.getRegistrations().then(function(rs){var any=false;rs.forEach(function(r){if(location.href.indexOf(r.scope)===0){any=true;r.unregister();}});
 if(any&&!sessionStorage.getItem('fc_sw_fix')){sessionStorage.setItem('fc_sw_fix','1');var go=function(){location.reload()};if(window.caches){caches.keys().then(function(k){return Promise.all(k.map(function(x){return caches.delete(x)}))}).then(go,go)}else go()}})})();
 </script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
-:root{--b1:#0B3D91;--b2:#1255C8;--b3:#1769E0;--b4:#3B82F6;--b5:#DBEAFE;--b6:#EFF5FF;--bg:#F3F6FC;--card:#fff;--tx:#0F1B33;--mut:#64748B;--line:#E3E9F4;--ok:#0E9F6E;--warn:#D97706;--bad:#DC2626;--r:16px;--sh:0 4px 20px rgba(15,40,100,.07);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-*{box-sizing:border-box;margin:0}html,body{height:100%}body{background:var(--bg);color:var(--tx);font-size:14px;-webkit-font-smoothing:antialiased}
-button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}a{color:var(--b3)}
+:root{--b1:#0B3D91;--b2:#1255C8;--b3:#1769E0;--b5:#DBEAFE;--b6:#EFF5FF;--tx:#0F1B33;--mut:#64748B;--line:#E3E9F4;--ok:#0E9F6E;--bad:#DC2626;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}html,body{height:100%}body{background:#F3F6FC;color:var(--tx);font-size:15px}
+.hero{background:linear-gradient(160deg,var(--b1),var(--b2) 65%,#2E7BF0);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 20px 90px;border-radius:0 0 34px 34px}
+.top{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:13px;background:#fff;color:var(--b2);display:flex;align-items:center;justify-content:center;font-size:19px}
+.top b{display:block;font-size:16px}.top span{font-size:12px;opacity:.8}.top button{margin-left:auto;border:0;background:rgba(255,255,255,.16);color:#fff;width:42px;height:42px;border-radius:13px;font-size:16px}
+.wrap{max-width:520px;margin:-66px auto 0;padding:0 16px calc(30px + env(safe-area-inset-bottom))}
+.card{background:#fff;border-radius:24px;box-shadow:0 10px 34px rgba(15,40,100,.12);padding:20px;margin-bottom:14px}
+.veh{display:flex;gap:14px;align-items:center}.veh .ic{width:54px;height:54px;border-radius:17px;background:var(--b5);color:var(--b3);font-size:23px;display:flex;align-items:center;justify-content:center;flex:none}
+.veh h2{font-size:22px;font-weight:800;letter-spacing:-.01em}.veh small{color:var(--mut);font-weight:600}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:700;background:var(--b5);color:var(--b1)}.pill.on{background:#DCFCE7;color:#166534}.pill.off{background:#EEF2F7;color:#475569}
+.pill i{font-size:8px}
+.go{width:190px;height:190px;border-radius:50%;border:0;color:#fff;font-weight:800;font-size:18px;background:linear-gradient(135deg,#1769E0,#0B3D91);box-shadow:0 18px 40px rgba(23,105,224,.5);display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;margin:26px auto 14px;transition:transform .15s}
+.go i{font-size:42px}.go:active{transform:scale(.96)}.go.on{background:linear-gradient(135deg,#EF4444,#991B1B);box-shadow:0 18px 40px rgba(220,38,38,.45);animation:pu 2s infinite}@keyframes pu{50%{transform:scale(1.04)}}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.grid div{background:var(--b6);border-radius:16px;padding:13px 8px;text-align:center}.grid b{display:block;font-size:19px;font-weight:800}.grid span{font-size:11px;color:var(--mut);font-weight:600}
+.msg{padding:12px 14px;border-radius:14px;font-weight:600;font-size:13.5px;line-height:1.45;margin-top:12px}.msg.err{background:#FEE2E2;color:#991B1B}.msg.ok{background:#DCFCE7;color:#166534}.msg.info{background:var(--b5);color:var(--b1)}
+.note{color:var(--mut);font-size:12.5px;line-height:1.6;text-align:center;margin-top:10px}
+.f{display:flex;align-items:center;gap:11px;background:var(--b6);border:1.5px solid var(--line);border-radius:16px;padding:8px 13px 8px 10px;margin-bottom:12px}.f:focus-within{background:#fff;border-color:var(--b3);box-shadow:0 0 0 4px rgba(23,105,224,.12)}
+.f>i{width:36px;height:36px;border-radius:11px;background:var(--b5);color:var(--b3);display:flex;align-items:center;justify-content:center;flex:none}.f>div{flex:1}.f label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.f input{width:100%;border:0;background:none;outline:0;font:inherit;font-weight:600;padding:3px 0;font-size:16px}
+.btn{width:100%;border:0;border-radius:16px;padding:15px;font:inherit;font-weight:800;color:#fff;background:var(--b3);display:flex;gap:9px;align-items:center;justify-content:center}.btn.ghost{background:var(--b5);color:var(--b2);margin-top:10px}.btn:disabled{opacity:.6}
+.lnk{background:none;border:0;color:var(--b3);font:inherit;font-weight:700;padding:10px 0}
+.spin{width:26px;height:26px;border:3px solid var(--b5);border-top-color:var(--b3);border-radius:50%;animation:s .8s linear infinite;margin:60px auto}@keyframes s{to{transform:rotate(360deg)}}
+.offline{background:#FEF3C7;color:#92400E;text-align:center;padding:8px;font-weight:700;font-size:13px}
+.center{text-align:center}.center h2{font-size:22px;font-weight:800;margin:6px 0 8px}.center p{color:var(--mut);line-height:1.6}
 .hidden{display:none !important}
-/* auth */
-.auth{min-height:100%;display:grid;grid-template-columns:1.05fr 1fr}
-.auth-hero{background:linear-gradient(150deg,var(--b1),var(--b2) 60%,#2E7BF0);color:#fff;padding:48px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
-.auth-hero::after{content:'';position:absolute;right:-120px;bottom:-120px;width:420px;height:420px;border-radius:50%;background:rgba(255,255,255,.08)}
-.auth-hero h1{font-size:34px;line-height:1.15;font-weight:800;letter-spacing:-.02em;margin:26px 0 12px}.auth-hero p{opacity:.88;line-height:1.6;max-width:430px}
-.feat{display:grid;gap:12px;margin-top:30px;position:relative;z-index:1}.feat div{display:flex;gap:12px;align-items:center;font-weight:600}.feat i{width:36px;height:36px;border-radius:11px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center}
-.auth-form{display:flex;align-items:center;justify-content:center;padding:32px;background:#fff}.auth-box{width:100%;max-width:400px}
-.auth-box h2{font-size:24px;font-weight:800;letter-spacing:-.02em}.auth-box .sub{color:var(--mut);margin:6px 0 22px}
-.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:18px}.logo{width:42px;height:42px;border-radius:13px;background:#fff;color:var(--b2);display:flex;align-items:center;justify-content:center;font-size:19px;flex:none;box-shadow:0 6px 16px rgba(0,0,0,.18)}
-/* form bubbles */
-.f{display:flex;align-items:center;gap:11px;background:var(--b6);border:1.5px solid var(--line);border-radius:14px;padding:8px 13px 8px 10px;margin-bottom:12px;transition:.15s}.f:focus-within{background:#fff;border-color:var(--b3);box-shadow:0 0 0 4px rgba(23,105,224,.12)}
-.f>i{width:34px;height:34px;border-radius:10px;background:var(--b5);color:var(--b3);display:flex;align-items:center;justify-content:center;flex:none}.f:focus-within>i{background:var(--b3);color:#fff}
-.f>div{flex:1;min-width:0}.f label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
-.f input,.f select,.f textarea{width:100%;border:0;background:none;outline:0;font-weight:600;padding:2px 0}.f textarea{min-height:56px;resize:vertical}
-.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;background:var(--b3);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.15s}.btn:hover{background:var(--b2)}.btn:disabled{opacity:.55;cursor:default}
-.btn.full{width:100%;padding:14px}.btn.ghost{background:var(--b5);color:var(--b2)}.btn.ghost:hover{background:#c9defc}.btn.red{background:#FEE2E2;color:var(--bad)}.btn.sm{padding:7px 12px;font-size:12.5px;border-radius:10px}
-.lnk{background:none;border:0;color:var(--b3);font-weight:600;padding:6px 0}.msg{padding:11px 14px;border-radius:12px;font-weight:600;margin-bottom:14px;font-size:13px}.msg.err{background:#FEE2E2;color:#991B1B}.msg.ok{background:#DCFCE7;color:#166534}.msg.info{background:var(--b5);color:var(--b1)}
-/* shell */
-.shell{display:grid;grid-template-columns:260px 1fr;min-height:100%}
-.side{background:linear-gradient(180deg,var(--b1),#0A3481);color:#fff;padding:20px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;overflow:auto}
-.side .brand{padding:4px 8px 22px}.side .logo{width:38px;height:38px}
-.nav a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;color:#CFE0FF;text-decoration:none;font-weight:600;margin-bottom:3px}.nav a i{width:20px;text-align:center}
-.nav a:hover{background:rgba(255,255,255,.09);color:#fff}.nav a.on{background:#fff;color:var(--b2);box-shadow:0 6px 16px rgba(0,0,0,.18)}
-.nav small{display:block;padding:14px 12px 6px;font-size:10.5px;letter-spacing:.12em;color:#8FB1EE;font-weight:700}
-.me{margin-top:auto;padding:12px;border-radius:14px;background:rgba(255,255,255,.09);display:flex;gap:10px;align-items:center}.av{width:38px;height:38px;border-radius:50%;background:var(--b4);display:flex;align-items:center;justify-content:center;font-weight:800;flex:none}
-.me b{display:block;font-size:13px}.me span{font-size:11px;color:#BBD2FA}
-.main{min-width:0}.top{position:sticky;top:0;z-index:20;background:rgba(243,246,252,.9);backdrop-filter:blur(10px);display:flex;align-items:center;gap:12px;padding:14px 26px;border-bottom:1px solid var(--line)}
-.top h1{font-size:19px;font-weight:800;letter-spacing:-.02em;flex:1}.burger{display:none;width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:#fff}
-.chip{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:99px;background:#fff;border:1px solid var(--line);font-weight:600;font-size:12.5px}
-.view{padding:24px 26px 60px;max-width:1400px}
-.banner{background:#FEF3C7;color:#92400E;padding:9px 26px;font-weight:600;font-size:13px}
-/* cards */
-.grid{display:grid;gap:16px}.kpis{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}.two{grid-template-columns:1.4fr 1fr}
-.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:18px;border:1px solid #EDF1F9}.card h3{font-size:14.5px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:9px}
-.kpi{display:flex;align-items:center;gap:14px}.kpi .ic{width:48px;height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:19px;background:var(--b5);color:var(--b3);flex:none}
-.kpi b{display:block;font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.1}.kpi span{color:var(--mut);font-weight:600;font-size:12.5px}
-.bars .row{display:grid;grid-template-columns:100px 1fr 34px;gap:10px;align-items:center;margin-bottom:9px;font-weight:600;font-size:12.5px}.bars .tr{height:10px;border-radius:99px;background:var(--b6);overflow:hidden}.bars .tr i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--b4),var(--b2))}
-.empty{text-align:center;color:var(--mut);padding:30px 10px}.empty i{font-size:30px;color:#B6C9EE;display:block;margin-bottom:10px}
-/* table */
-.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}.tools .f{margin:0;flex:1;min-width:200px}.tools .f.s{flex:0 0 190px;min-width:150px}
-.tw{overflow-x:auto;border-radius:var(--r)}table{width:100%;border-collapse:collapse;background:#fff}th{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);text-align:left;padding:12px 14px;background:var(--b6);white-space:nowrap}
-td{padding:13px 14px;border-top:1px solid var(--line);vertical-align:middle}tr:hover td{background:#FAFCFF}.act{display:flex;gap:6px;justify-content:flex-end}
-.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-size:11.5px;font-weight:700;white-space:nowrap}.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
-.s-ok{background:#DCFCE7;color:#166534}.s-bl{background:var(--b5);color:var(--b1)}.s-wn{background:#FEF3C7;color:#92400E}.s-bd{background:#FEE2E2;color:#991B1B}.s-gr{background:#EEF2F7;color:#475569}
-/* modal + toast */
-.ov{position:fixed;inset:0;background:rgba(7,22,60,.55);backdrop-filter:blur(3px);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
-.mdl{background:#fff;border-radius:20px;width:100%;max-width:460px;padding:22px;box-shadow:0 30px 80px rgba(0,0,0,.35);max-height:94vh;overflow:auto}.mdl.wide{max-width:820px}
-.mdl h2{font-size:18px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:10px}.fg{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.fg .full{grid-column:1/-1}
-.mf{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
-#toasts{position:fixed;right:18px;bottom:18px;z-index:200;display:grid;gap:10px}.toast{background:#0F1B33;color:#fff;padding:12px 16px;border-radius:13px;font-weight:600;box-shadow:0 12px 30px rgba(0,0,0,.3);display:flex;gap:10px;align-items:center;max-width:340px;animation:up .25s}.toast.err{background:#B91C1C}.toast.ok i{color:#4ADE80}
-@keyframes up{from{transform:translateY(10px);opacity:0}}
-.spin{width:22px;height:22px;border:3px solid var(--b5);border-top-color:var(--b3);border-radius:50%;animation:sp .8s linear infinite;margin:30px auto}@keyframes sp{to{transform:rotate(360deg)}}
-.boot{display:flex;align-items:center;justify-content:center;height:100%}
-.road td:first-child{font-weight:700}.done{color:var(--ok)}
-/* responsive */
-@media(max-width:900px){.auth{grid-template-columns:1fr}.auth-hero{display:none}.two{grid-template-columns:1fr}.shell{grid-template-columns:1fr}
-.side{position:fixed;left:0;top:0;z-index:60;width:272px;transform:translateX(-100%);transition:.25s}.side.open{transform:none;box-shadow:0 0 0 100vmax rgba(7,22,60,.5)}.burger{display:block}.top,.view{padding-left:16px;padding-right:16px}.fg{grid-template-columns:1fr}
-.rt thead{display:none}.rt tr{display:block;border-top:1px solid var(--line);padding:10px 12px}.rt td{display:flex;justify-content:space-between;gap:12px;border:0;padding:5px 0}.rt td::before{content:attr(data-l);color:var(--mut);font-weight:600;font-size:12px}.rt .act{justify-content:flex-start}}
-/* tracking */
-.trk{display:grid;grid-template-columns:350px 1fr;gap:16px;margin-top:16px;height:calc(100vh - 270px);min-height:480px}.trk .lst{overflow:auto;padding:12px}.trk #map{height:100%;border-radius:var(--r);box-shadow:var(--sh);border:1px solid #EDF1F9;z-index:1}
-.vi{display:flex;gap:11px;align-items:center;padding:11px;border-radius:14px;cursor:pointer;border:1.5px solid transparent}.vi:hover{background:var(--b6)}.vi.on{background:var(--b6);border-color:var(--b4)}.vi .mk2{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
-.vi small{color:var(--mut);display:block;font-size:12px;margin-top:2px}.vi .r{margin-left:auto;text-align:right;flex:none}
-.mk{width:34px;height:34px;border-radius:50%;border:3px solid #fff;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,.35)}
-.mv{background:#1769E0}.st{background:#475569}.of{background:#94A3B8}.ov{background:#DC2626}.mk2.mv,.mk2.st,.mk2.of,.mk2.ov{position:static}
-.bigbtn{width:150px;height:150px;border-radius:50%;border:0;color:#fff;font-weight:800;font-size:16px;background:linear-gradient(135deg,#1769E0,#0B3D91);box-shadow:0 14px 34px rgba(23,105,224,.45);display:flex;flex-direction:column;gap:6px;align-items:center;justify-content:center;margin:20px auto}.bigbtn i{font-size:34px}.bigbtn.on{background:linear-gradient(135deg,#DC2626,#991B1B);box-shadow:0 14px 34px rgba(220,38,38,.4);animation:pulse 2s infinite}
-@keyframes pulse{50%{transform:scale(1.04)}}.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}.sg div{background:var(--b6);border-radius:14px;padding:12px}.sg b{display:block;font-size:18px}.sg span{font-size:11.5px;color:var(--mut);font-weight:600}
-@media(max-width:900px){.trk{grid-template-columns:1fr;height:auto}.trk #map{height:55vh}.trk .lst{max-height:360px}.trk .lst{order:2}}
 </style>
 </head>
 <body>
-<div id="app"><div class="boot"><div class="spin"></div></div></div>
-<div id="modalRoot"></div><div id="toasts"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<div id="off" class="offline hidden"><i class="fa-solid fa-wifi"></i> No internet. Location will send again when you are back online.</div>
+<div id="app"><div class="spin"></div></div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, orderBy, limit, startAfter, serverTimestamp, writeBatch, getCountFromServer, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, query, where, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ============ CONFIG (public by design; protect with authorised domains + key restrictions) ============ */
 const firebaseConfig = {
   apiKey: "AIzaSyCgTv9zCdz0eTQSgv5hUlqQ0QxaApI6jsQ",
   authDomain: "truck-project-261bf.firebaseapp.com",
@@ -107,454 +57,128 @@ const firebaseConfig = {
   messagingSenderId: "399205379833",
   appId: "1:399205379833:web:610783782711f6ffa03c28"
 };
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app), db = getFirestore(app);
+const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
 try { await setPersistence(auth, browserLocalPersistence); } catch (e) {}
 
-/* ============ HELPERS ============ */
-const $ = (s, r = document) => r.querySelector(s);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const today = () => new Date().toISOString().slice(0, 10);
-const fmtD = d => d ? new Date(d + (String(d).length === 10 ? 'T00:00' : '')).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
-const fmtTs = t => t && t.toDate ? t.toDate().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
-const num = v => v === '' || v == null ? null : Number(v);
-function toast(msg, type = 'ok') { const t = document.createElement('div'); t.className = 'toast ' + type; t.innerHTML = `<i class="fa-solid ${type === 'err' ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i><span>${esc(msg)}</span>`; $('#toasts').appendChild(t); setTimeout(() => t.remove(), 4800); }
-function modal(html, wide) { closeModal(); const m = document.createElement('div'); m.className = 'ov'; m.innerHTML = `<div class="mdl ${wide ? 'wide' : ''}" role="dialog">${html}</div>`; m.addEventListener('mousedown', e => { if (e.target === m) closeModal(); }); $('#modalRoot').appendChild(m); return m; }
-function closeModal() { $('#modalRoot').innerHTML = ''; }
-function ask(title, text, okText = 'Confirm', danger) { return new Promise(res => { const m = modal(`<h2><i class="fa-solid fa-triangle-exclamation" style="color:var(--warn)"></i>${esc(title)}</h2><p style="color:var(--mut);line-height:1.5">${esc(text)}</p><div class="mf"><button class="btn ghost" data-n>Cancel</button><button class="btn ${danger ? 'red' : ''}" data-y>${esc(okText)}</button></div>`); m.querySelector('[data-y]').onclick = () => { closeModal(); res(true); }; m.querySelector('[data-n]').onclick = () => { closeModal(); res(false); }; }); }
-const AUTH_ERR = { 'auth/invalid-credential': 'Wrong email or password.', 'auth/invalid-email': 'That email address is not valid.', 'auth/user-disabled': 'This account has been disabled.', 'auth/too-many-requests': 'Too many attempts. Wait a few minutes or reset your password.', 'auth/email-already-in-use': 'An account with this email already exists.', 'auth/weak-password': 'Password must be at least 8 characters.', 'auth/operation-not-allowed': 'Email/password sign-in is not switched on in Firebase Authentication.', 'auth/network-request-failed': 'No internet connection. Check your network and try again.' };
-const errMsg = e => AUTH_ERR[e && e.code] || (e && e.code === 'permission-denied' ? 'You do not have permission to do that.' : (e && e.message) || 'Something went wrong.');
-const field = (icon, label, name, val = '', type = 'text', extra = '') => `<div class="f ${extra.includes('full') ? 'full' : ''}"><i class="fa-solid fa-${icon}"></i><div><label>${label}</label><input name="${name}" type="${type}" value="${esc(val)}" ${extra.replace('full', '')}></div></div>`;
-const selectF = (icon, label, name, opts, val = '', extra = '') => `<div class="f ${extra}"><i class="fa-solid fa-${icon}"></i><div><label>${label}</label><select name="${name}">${opts.map(o => `<option ${o === val ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select></div></div>`;
+const $ = (s) => document.querySelector(s), root = $('#app');
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const ERR = { 'auth/invalid-credential': 'Wrong email or password.', 'auth/invalid-email': 'That email is not valid.', 'auth/user-disabled': 'This account is disabled.', 'auth/too-many-requests': 'Too many attempts. Wait a few minutes or reset your password.', 'auth/email-already-in-use': 'This email already has an account. Please sign in instead.', 'auth/weak-password': 'Password must be at least 8 characters.', 'auth/operation-not-allowed': 'Email/password sign-in is not switched on in Firebase Authentication.', 'auth/network-request-failed': 'No internet connection.', 'permission-denied': 'You do not have permission to do that.' };
+const errMsg = (e) => ERR[e && e.code] || (e && e.message) || 'Something went wrong.';
+const ago = (ms) => { const m = Math.round((Date.now() - ms) / 60000); return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : Math.round(m / 60) + ' h ago'; };
+const dist = (a, b) => { const r = Math.PI / 180, x = (b.lng - a.lng) * r * Math.cos((a.lat + b.lat) / 2 * r), y = (b.lat - a.lat) * r; return Math.sqrt(x * x + y * y) * 6371000; };
+addEventListener('offline', () => $('#off').classList.remove('hidden')); addEventListener('online', () => $('#off').classList.add('hidden')); if (!navigator.onLine) $('#off').classList.remove('hidden');
 
-/* ============ ROLES & PERMISSIONS (mirrored in firestore.rules) ============ */
-const ROLES = ['SUPER_ADMIN', 'OWNER', 'FLEET_MANAGER', 'OPERATIONS_MANAGER', 'DISPATCHER', 'FINANCE_MANAGER', 'MAINTENANCE_MANAGER', 'DRIVER', 'VIEWER'];
-const roleLabel = r => String(r || '').replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
-const ADMIN = ['SUPER_ADMIN', 'OWNER'], FLEET_W = [...ADMIN, 'FLEET_MANAGER', 'OPERATIONS_MANAGER'];
-const PERM = { dashboard: { view: ROLES.filter(r => r !== 'DRIVER') }, fleet: { view: ROLES.filter(r => r !== 'DRIVER'), write: FLEET_W, del: [...ADMIN, 'FLEET_MANAGER'], status: [...FLEET_W, 'DISPATCHER'] }, staff: { view: ADMIN, write: ADMIN }, audit: { view: ADMIN }, roadmap: { view: ROLES.filter(r => r !== 'DRIVER') }, tracking: { view: ROLES.filter(r => r !== 'DRIVER') }, driver: { view: ['DRIVER'] }, drivers: { view: FLEET_W, write: FLEET_W, del: ADMIN }, health: { view: ADMIN } };
-const S = { user: null, profile: null, company: { name: 'Your Company' }, route: 'dashboard' };
-const can = (m, a) => !!(PERM[m] && PERM[m][a] && S.profile && PERM[m][a].includes(S.profile.role));
+const hero = (name, out) => `<div class="hero"><div class="top"><div class="logo"><i class="fa-solid fa-truck-fast"></i></div><div><b>FleetCommand</b><span>${esc(name || 'Driver')}</span></div>${out ? '<button id="lo" aria-label="Sign out"><i class="fa-solid fa-right-from-bracket"></i></button>' : ''}</div></div>`;
 
-/* ============ AUDIT ============ */
-async function audit(action, entity, entityId, changes = {}) {
-  try { await addDoc(collection(db, 'auditLogs'), { userId: S.user.uid, userName: S.profile.name, userEmail: S.user.email, role: S.profile.role, action, entity, entityId: entityId || '', changes, ts: serverTimestamp() }); }
-  catch (e) { console.warn('audit failed', e); toast('Action saved, but the audit entry could not be written.', 'err'); }
-}
-const diffObj = (o, n) => { const d = {}; for (const k of new Set([...Object.keys(o || {}), ...Object.keys(n || {})])) { if (['updatedAt', 'updatedBy', 'createdAt', 'createdBy'].includes(k)) continue; if (JSON.stringify(o?.[k] ?? null) !== JSON.stringify(n?.[k] ?? null)) d[k] = { from: o?.[k] ?? null, to: n?.[k] ?? null }; } return d; };
-
-/* ============ AUTH SCREENS ============ */
-const root = $('#app');
-function authShell(inner) { return `<div class="auth"><div class="auth-hero"><div><div class="brand"><div class="logo"><i class="fa-solid fa-truck-fast"></i></div>FleetCommand</div><h1>Run your entire fleet from one command centre.</h1><p>Vehicles, drivers, trips and cross-border operations, with a full audit trail and role-based access.</p></div><div class="feat"><div><i class="fa-solid fa-shield-halved"></i>Role-based security and audit log</div><div><i class="fa-solid fa-truck"></i>Real fleet records, no fake data</div><div><i class="fa-solid fa-earth-africa"></i>Built for cross-border logistics</div></div></div><div class="auth-form"><div class="auth-box">${inner}</div></div></div>`; }
-function showAuth(mode = 'login', msg = '', kind = 'err') {
-  const m = msg ? `<div class="msg ${kind}">${esc(msg)}</div>` : '';
-  const titles = { login: ['Welcome back', 'Sign in to your fleet workspace.'], register: ['Create owner account', 'The first account becomes the company owner.'], reset: ['Reset password', 'We will email you a reset link.'] };
-  root.innerHTML = authShell(`<h2>${titles[mode][0]}</h2><p class="sub">${titles[mode][1]}</p>${m}<form id="af" novalidate>
-    ${mode === 'register' ? field('user', 'Full name', 'name', '', 'text', 'autocomplete="name" required') : ''}
-    ${field('envelope', 'Email', 'email', '', 'email', 'autocomplete="email" required')}
-    ${mode !== 'reset' ? field('lock', 'Password', 'password', '', 'password', `autocomplete="${mode === 'login' ? 'current' : 'new'}-password" required`) : ''}
-    <button class="btn full" type="submit"><i class="fa-solid fa-${mode === 'login' ? 'right-to-bracket' : mode === 'register' ? 'user-plus' : 'paper-plane'}"></i>${mode === 'login' ? 'Sign in' : mode === 'register' ? 'Create account' : 'Send reset link'}</button></form>
-    <div style="margin-top:16px;display:flex;justify-content:space-between;flex-wrap:wrap">${mode === 'login' ? '<button class="lnk" data-m="reset">Forgot password?</button><button class="lnk" data-m="register">Create owner account</button>' : '<button class="lnk" data-m="login"><i class="fa-solid fa-arrow-left"></i> Back to sign in</button>'}</div>`);
-  root.querySelectorAll('[data-m]').forEach(b => b.onclick = () => showAuth(b.dataset.m));
-  $('#af').onsubmit = async e => {
-    e.preventDefault(); const f = new FormData(e.target), email = (f.get('email') || '').trim(), pw = f.get('password') || '', btn = e.target.querySelector('button'); btn.disabled = true;
-    try {
-      if (!email) throw { code: 'auth/invalid-email' };
-      if (mode === 'login') await signInWithEmailAndPassword(auth, email, pw);
-      else if (mode === 'register') { const nm = (f.get('name') || '').trim(); if (nm.length < 2) throw { message: 'Please enter your full name.' }; if (pw.length < 8) throw { code: 'auth/weak-password' }; sessionStorage.setItem('fc_name', nm); const c = await createUserWithEmailAndPassword(auth, email, pw); await sendEmailVerification(c.user); }
-      else { await sendPasswordResetEmail(auth, email); showAuth('login', 'If that email has an account, a reset link is on its way.', 'ok'); }
-    } catch (er) { showAuth(mode, errMsg(er)); }
+/* ---------- sign in ---------- */
+function showLogin(msg, kind = 'err', reset) {
+  root.innerHTML = hero() + `<div class="wrap"><div class="card"><h2 style="font-size:22px;font-weight:800">${reset ? 'Reset password' : 'Driver sign in'}</h2><p style="color:var(--mut);margin:4px 0 18px">${reset ? 'We will email you a reset link.' : 'Use the email your company registered for you.'}</p>${msg ? `<div class="msg ${kind}" style="margin:0 0 14px">${esc(msg)}</div>` : ''}
+  <form id="lf"><div class="f"><i class="fa-solid fa-envelope"></i><div><label>Email</label><input name="e" type="email" autocomplete="email" required></div></div>${reset ? '' : '<div class="f"><i class="fa-solid fa-lock"></i><div><label>Password</label><input name="p" type="password" autocomplete="current-password" required></div></div>'}
+  <button class="btn"><i class="fa-solid fa-${reset ? 'paper-plane' : 'right-to-bracket'}"></i>${reset ? 'Send reset link' : 'Sign in'}</button></form><div class="center"><button class="lnk" id="sw">${reset ? 'Back to sign in' : 'Forgot password?'}</button>${reset ? '' : '<br><button class="lnk" id="rg">New driver? Register here</button>'}</div></div></div>`;
+  $('#sw').onclick = () => showLogin('', 'err', !reset); if ($('#rg')) $('#rg').onclick = () => showRegister();
+  $('#lf').onsubmit = async (e) => {
+    e.preventDefault(); const f = new FormData(e.target), b = e.target.querySelector('button'); b.disabled = true;
+    try { if (reset) { await sendPasswordResetEmail(auth, f.get('e').trim()); showLogin('If that email has an account, a link is on its way. Open it, set your password, then sign in.', 'ok'); } else await signInWithEmailAndPassword(auth, f.get('e').trim(), f.get('p')); }
+    catch (er) { showLogin(errMsg(er), 'err', reset); }
   };
 }
-function showVerify() {
-  root.innerHTML = authShell(`<h2>Verify your email</h2><p class="sub">We sent a link to <b>${esc(S.user.email)}</b>. Open it, then come back here.</p><div class="msg info">Access is blocked until your email is verified. This protects the fleet data.</div>
-  <button class="btn full" id="vc"><i class="fa-solid fa-check"></i>I have verified, continue</button><div style="margin-top:14px;display:flex;justify-content:space-between"><button class="lnk" id="vr">Resend email</button><button class="lnk" id="vo">Sign out</button></div>`);
-  $('#vc').onclick = async () => { await S.user.reload(); await S.user.getIdToken(true); if (auth.currentUser.emailVerified) boot(auth.currentUser); else toast('Not verified yet. Check your inbox and spam folder.', 'err'); };
-  $('#vr').onclick = async () => { try { await sendEmailVerification(S.user); toast('Verification email sent.'); } catch (e) { toast(errMsg(e), 'err'); } };
-  $('#vo').onclick = () => signOut(auth);
+function showCenter(icon, title, text, extra = '') { root.innerHTML = hero('', true) + `<div class="wrap"><div class="card center"><div style="font-size:38px;color:var(--b3)"><i class="fa-solid fa-${icon}"></i></div><h2>${title}</h2><p>${text}</p>${extra}</div></div>`; $('#lo').onclick = () => signOut(auth); }
+function showVerify(u) {
+  showCenter('envelope-circle-check', 'Verify your email', `We sent a link to <b>${esc(u.email)}</b>. Open it, then tap the button below.`, '<button class="btn" id="vc" style="margin-top:16px">I have verified, continue</button><button class="btn ghost" id="vr">Resend email</button>');
+  $('#vc').onclick = async () => { await u.reload(); await u.getIdToken(true); auth.currentUser.emailVerified ? start(auth.currentUser) : alert('Not verified yet. Check your inbox and spam folder.'); };
+  $('#vr').onclick = async () => { try { await sendEmailVerification(u); alert('Verification email sent.'); } catch (e) { alert(errMsg(e)); } };
 }
-function showNote(icon, title, text) { root.innerHTML = authShell(`<h2>${title}</h2><p class="sub" style="line-height:1.6">${text}</p><button class="btn full" id="so"><i class="fa-solid fa-${icon}"></i>Sign out</button>`); $('#so').onclick = () => signOut(auth); }
-function showSetup() {
-  root.innerHTML = authShell(`<h2>Set up your company</h2><p class="sub">You are the first user, so you will become the <b>Owner</b> with full access.</p><form id="sf">${field('building', 'Company name', 'company', '', 'text', 'required')}${field('phone', 'Your phone', 'phone', '', 'tel')}<button class="btn full"><i class="fa-solid fa-flag-checkered"></i>Create workspace</button></form>`);
-  $('#sf').onsubmit = async e => {
-    e.preventDefault(); const f = new FormData(e.target), name = (f.get('company') || '').trim(); if (name.length < 2) return toast('Enter your company name.', 'err');
+
+
+/* ---------- registration: only drivers the company registered, proved by the PIN ---------- */
+const lc = (x) => String(x || '').trim().toLowerCase();
+let REG = false, INV = null;
+function showRegister(email = '', msg = '', kind = 'err', ok = false) {
+  const blocked = msg.startsWith('Get registered first');
+  root.innerHTML = hero() + `<div class="wrap"><div class="card"><h2 style="font-size:22px;font-weight:800">Driver registration</h2><p style="color:var(--mut);margin:4px 0 18px">Only drivers registered by their company can create an account.</p>
+  ${blocked ? `<div class="msg err" style="margin:0 0 14px;text-align:center"><div style="font-size:30px"><i class="fa-solid fa-user-lock"></i></div><div style="font-size:18px;font-weight:800;margin:6px 0">Get registered first</div><div style="font-weight:500">This email is not on the company's driver list. Ask your fleet manager to register you in the management system, then come back with your PIN.</div></div>` : msg ? `<div class="msg ${kind}" style="margin:0 0 14px">${esc(msg)}</div>` : ''}
+  ${!ok ? `<form id="ck"><div class="f"><i class="fa-solid fa-envelope"></i><div><label>Your email</label><input name="e" type="email" autocomplete="email" value="${esc(email)}" required></div></div><button class="btn"><i class="fa-solid fa-magnifying-glass"></i>Check my registration</button></form>`
+  : `<div class="msg ok" style="margin:0 0 14px"><i class="fa-solid fa-circle-check"></i> ${esc(email)} is registered with your company.</div><form id="rf"><div class="f"><i class="fa-solid fa-key"></i><div><label>Registration PIN (6 digits)</label><input name="pin" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" required></div></div><div class="f"><i class="fa-solid fa-user"></i><div><label>Full name</label><input name="n" autocomplete="name" required></div></div><div class="f"><i class="fa-solid fa-phone"></i><div><label>Phone</label><input name="ph" type="tel" autocomplete="tel"></div></div><div class="f"><i class="fa-solid fa-lock"></i><div><label>Create password (8+ characters)</label><input name="p" type="password" autocomplete="new-password" required></div></div><div class="f"><i class="fa-solid fa-lock"></i><div><label>Confirm password</label><input name="p2" type="password" autocomplete="new-password" required></div></div><button class="btn"><i class="fa-solid fa-user-plus"></i>Create my account</button></form>`}
+  <div class="center"><button class="lnk" id="bk">Back to sign in</button></div></div></div>`;
+  $('#bk').onclick = () => showLogin();
+  if ($('#ck')) $('#ck').onsubmit = async (e) => {
+    e.preventDefault(); const em = lc(new FormData(e.target).get('e')); e.target.querySelector('button').disabled = true;
+    try { const sn = await getDoc(doc(db, 'driverInvites', em)); if (!sn.exists()) return showRegister(em, 'Get registered first'); if (sn.data().claimed) return showRegister(em, 'This email is already registered. Please sign in.', 'info'); INV = sn.data(); showRegister(em, '', 'ok', true); }
+    catch (er) { showRegister(em, errMsg(er)); }
+  };
+  if ($('#rf')) $('#rf').onsubmit = async (e) => {
+    e.preventDefault(); const f = new FormData(e.target), n = f.get('n').trim(), p = f.get('p'), pin = f.get('pin').trim(), ph = f.get('ph').trim();
+    if (!/^\d{6}$/.test(pin)) return showRegister(email, 'The PIN is 6 digits.', 'err', true); if (n.length < 2) return showRegister(email, 'Enter your full name.', 'err', true); if (p.length < 8) return showRegister(email, 'Password must be at least 8 characters.', 'err', true); if (p !== f.get('p2')) return showRegister(email, 'The two passwords do not match.', 'err', true);
+    e.target.querySelector('button').disabled = true; REG = true; let cred;
+    try { cred = await createUserWithEmailAndPassword(auth, email, p); }
+    catch (er) { REG = false; return showRegister(email, errMsg(er), 'err', true); }
     try {
-      const b = writeBatch(db), uid = S.user.uid;
-      b.set(doc(db, 'settings', 'bootstrap'), { ownerUid: uid, createdAt: serverTimestamp() });
-      b.set(doc(db, 'settings', 'company'), { name, createdAt: serverTimestamp() });
-      b.set(doc(db, 'users', uid), { name: sessionStorage.getItem('fc_name') || S.user.displayName || S.user.email.split('@')[0], email: S.user.email, phone: (f.get('phone') || '').trim(), role: 'OWNER', active: true, createdAt: serverTimestamp() });
-      await b.commit(); boot(S.user);
-    } catch (er) { toast(errMsg(er), 'err'); }
+      await setDoc(doc(db, 'users', cred.user.uid), { name: n, email, phone: ph, role: 'DRIVER', active: true, driverId: INV.driverId, invitePin: pin, createdAt: serverTimestamp(), createdBy: INV.createdBy || '' });
+      await updateDoc(doc(db, 'driverInvites', email), { claimed: true, claimedBy: cred.user.uid, claimedAt: serverTimestamp() });
+    } catch (er) { try { await cred.user.delete(); } catch (x) { await signOut(auth); } REG = false; return showRegister(email, er.code === 'permission-denied' ? 'Wrong registration PIN, or the company rules are not published yet. Check the PIN with your fleet manager.' : errMsg(er), 'err', true); }
+    REG = false; start(cred.user);
   };
 }
 
-/* ============ BOOT ============ */
-let idleT; function armIdle() { clearTimeout(idleT); idleT = setTimeout(() => { toast('Signed out after 30 minutes of inactivity.', 'err'); signOut(auth); }, 30 * 60 * 1000); }
-['click', 'keydown', 'touchstart', 'mousemove'].forEach(ev => addEventListener(ev, () => { if (S.profile) armIdle(); }, { passive: true }));
-addEventListener('offline', () => { $('#net')?.classList.remove('hidden'); }); addEventListener('online', () => { $('#net')?.classList.add('hidden'); });
-onAuthStateChanged(auth, u => { S.user = u; S.profile = null; if (!u) { clearTimeout(idleT); return showAuth('login'); } if (!u.emailVerified) return showVerify(); boot(u); });
-async function boot(u) {
-  root.innerHTML = '<div class="boot"><div class="spin"></div></div>';
+/* ---------- boot ---------- */
+let ME = null, VEH = null;
+onAuthStateChanged(auth, (u) => { if (REG) return; if (!u) { stopTrack(true); ME = null; return showLogin(); } start(u); });
+async function start(u) {
+  root.innerHTML = '<div class="spin"></div>';
   try {
     const ps = await getDoc(doc(db, 'users', u.uid));
-    if (!ps.exists()) { const bs = await getDoc(doc(db, 'settings', 'bootstrap')); return bs.exists() ? showNote('right-from-bracket', 'Account not set up', 'Your login works, but the owner has not added you to the company yet. Ask the owner to create your staff profile, then sign in again.') : showSetup(); }
-    S.profile = { id: u.uid, ...ps.data() };
-    if (S.profile.role === 'DRIVER' && S.profile.active && !location.search.includes('stay')) { location.replace('fleet-driver.html'); return; }
-    if (!S.profile.active) return showNote('right-from-bracket', 'Account deactivated', 'This account has been deactivated. Contact the company owner.');
-    const cs = await getDoc(doc(db, 'settings', 'company')); if (cs.exists()) S.company = cs.data();
-    if (!sessionStorage.getItem('fc_login_logged')) { sessionStorage.setItem('fc_login_logged', '1'); audit('LOGIN', 'session', u.uid); }
-    armIdle(); renderShell();
-  } catch (e) { showNote('rotate', 'Could not load your workspace', esc(errMsg(e)) + '. Check your connection and Firestore rules, then sign in again.'); }
+    if (!ps.exists()) { await signOut(auth); return showRegister(lc(u.email), 'Get registered first'); }
+    ME = { id: u.uid, ...ps.data() };
+    if (!ME.active) return showCenter('ban', 'Account deactivated', 'Contact your fleet manager.');
+    if (ME.role !== 'DRIVER') return showCenter('desktop', 'This app is for drivers', 'You are signed in as ' + esc(ME.role.replace(/_/g, ' ').toLowerCase()) + '. Use the management system instead.', '<a class="btn" style="text-decoration:none;margin-top:16px" href="./">Open management system</a>');
+    const sn = await getDocs(query(collection(db, 'vehicles'), where('driverId', '==', ME.driverId || '__none'), limit(1)));
+    VEH = sn.docs[0] ? { id: sn.docs[0].id, ...sn.docs[0].data() } : null;
+    if (!VEH) return showCenter('truck', 'No vehicle assigned', 'Ask your fleet manager to assign you to a vehicle, then reopen this page.');
+    render(); if (sessionStorage.getItem('fc_on') === '1') startTrack();
+  } catch (e) { if (e && e.code === 'permission-denied') return showCenter('desktop', 'This app is for drivers', 'This account is not a driver account. Use the management system instead.', '<a class="btn" style="text-decoration:none;margin-top:16px" href="./">Open management system</a><button class="btn ghost" id="so2">Sign out</button>') || ($('#so2').onclick = () => signOut(auth));
+    showCenter('rotate', 'Could not load', esc(errMsg(e)) + '. Check your internet and try again.', '<button class="btn" style="margin-top:16px" onclick="location.reload()">Try again</button>'); }
 }
 
-/* ============ SHELL + ROUTER ============ */
-const NAV = [['dashboard', 'gauge-high', 'Dashboard'], ['fleet', 'truck', 'Fleet'], ['drivers', 'id-card', 'Drivers'], ['tracking', 'satellite-dish', 'Live Tracking'], ['driver', 'location-crosshairs', 'My Tracker'], ['staff', 'users-gear', 'Staff & Roles'], ['audit', 'clipboard-list', 'Audit Log'], ['health', 'stethoscope', 'System Check'], ['roadmap', 'map', 'Roadmap']];
-function renderShell() {
-  const nav = NAV.filter(n => can(n[0], 'view')).map(n => `<a href="#/${n[0]}" data-r="${n[0]}"><i class="fa-solid fa-${n[1]}"></i>${n[2]}</a>`).join('');
-  const ini = (S.profile.name || '?').split(' ').map(x => x[0]).slice(0, 2).join('').toUpperCase();
-  root.innerHTML = `<div class="shell"><aside class="side" id="side"><div class="brand"><div class="logo"><i class="fa-solid fa-truck-fast"></i></div><div>${esc(S.company.name)}<div style="font-size:11px;font-weight:600;color:#9DBCF2">FleetCommand</div></div></div><nav class="nav"><small>OPERATIONS</small>${nav}</nav>
-  <div class="me"><div class="av">${esc(ini)}</div><div style="min-width:0;flex:1"><b style="overflow:hidden;text-overflow:ellipsis">${esc(S.profile.name)}</b><span>${roleLabel(S.profile.role)}</span></div><button class="btn sm ghost" id="lo" title="Sign out" aria-label="Sign out"><i class="fa-solid fa-right-from-bracket"></i></button></div></aside>
-  <div class="main"><div id="net" class="banner ${navigator.onLine ? 'hidden' : ''}"><i class="fa-solid fa-wifi"></i> You are offline. Changes cannot be saved until the connection returns.</div><header class="top"><button class="burger" id="bg" aria-label="Menu"><i class="fa-solid fa-bars"></i></button><h1 id="ttl"></h1><span class="chip"><i class="fa-solid fa-circle" style="color:var(--ok);font-size:8px"></i>${esc(S.company.name)}</span></header><main class="view" id="view"></main></div></div>`;
-  $('#lo').onclick = () => { sessionStorage.removeItem('fc_login_logged'); signOut(auth); };
-  $('#bg').onclick = () => $('#side').classList.toggle('open');
-  addEventListener('hashchange', route); route();
+/* ---------- tracker ---------- */
+const T = { on: false, watch: null, wake: null, fix: null, sent: 0, lastLive: 0, hist: null, msg: '', count: 0 };
+function render() {
+  root.innerHTML = hero(ME.name, true) + `<div class="wrap"><div class="card"><div class="veh"><div class="ic"><i class="fa-solid fa-truck"></i></div><div style="flex:1;min-width:0"><small>${esc(VEH.fleetId || '')}</small><h2>${esc(VEH.registration)}</h2><small>${esc([VEH.make, VEH.model].filter(Boolean).join(' '))}</small></div></div></div>
+  <div class="card center"><span class="pill" id="pl"></span><button class="go" id="go"></button><div id="tm"></div></div>
+  <div class="card"><div class="grid"><div><b id="ta">—</b><span>GPS accuracy</span></div><div><b id="ts">—</b><span>Speed</span></div><div><b id="tc">0</b><span>Updates sent</span></div></div><div class="note" id="tl">Last sent: —</div></div>
+  <p class="note">Keep this screen open and the phone unlocked while driving. Phones pause GPS when the screen is locked or this page is in the background. Use a car charger.<br>Tip: use your browser menu → <b>Add to Home screen</b> for quick access.</p></div>`;
+  $('#lo').onclick = () => { stopTrack(); signOut(auth); }; $('#go').onclick = () => (T.on ? stopTrack() : startTrack()); paint();
 }
-const VIEWS = { drivers: viewDrivers, health: viewHealth, tracking: viewTracking, driver: viewDriver, dashboard: viewDashboard, fleet: viewFleet, staff: viewStaff, audit: viewAudit, roadmap: viewRoadmap };
-function route() {
-  if (!S.profile) return; cleanup(); let r = (location.hash.replace('#/', '') || '').split('?')[0];
-  if (!VIEWS[r] || !can(r, 'view')) r = NAV.find(n => can(n[0], 'view'))[0];
-  S.route = r; $('#side')?.classList.remove('open'); document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', a.dataset.r === r));
-  $('#ttl').textContent = (NAV.find(n => n[0] === r) || [])[2] || ''; $('#view').innerHTML = '<div class="spin"></div>';
-  VIEWS[r]().catch(e => { console.error(e); $('#view').innerHTML = `<div class="card empty"><i class="fa-solid fa-circle-exclamation"></i>${esc(errMsg(e))}</div>`; });
+function paint() {
+  const g = $('#go'); if (!g) return; g.className = 'go' + (T.on ? ' on' : ''); g.innerHTML = T.on ? '<i class="fa-solid fa-stop"></i>Stop sharing' : '<i class="fa-solid fa-play"></i>Start trip';
+  const p = $('#pl'); p.className = 'pill ' + (T.on ? 'on' : 'off'); p.innerHTML = `<i class="fa-solid fa-circle"></i>${T.on ? 'Sharing live location' : 'Not sharing'}`;
+  $('#ta').textContent = T.fix ? '±' + Math.round(T.fix.acc) + ' m' : '—'; $('#ts').textContent = T.fix && T.fix.spd != null ? Math.round(T.fix.spd) + ' km/h' : '—'; $('#tc').textContent = T.count; $('#tl').textContent = 'Last sent: ' + (T.sent ? ago(T.sent) : '—');
+  $('#tm').innerHTML = T.msg ? `<div class="msg err">${esc(T.msg)}</div>` : T.on ? '<div class="msg ok">The control room can see your position.</div>' : '<div class="msg info">Tap Start trip when you begin driving.</div>';
 }
-
-/* ============ FLEET DATA ============ */
-const STATUS = ['Available', 'Assigned', 'Loading', 'In Transit', 'At Border', 'Delivered', 'Parked', 'Maintenance', 'Breakdown', 'Accident', 'Inactive'];
-const TYPES = ['Horse / Truck tractor', 'Rigid truck', 'Tipper', 'Tanker', 'Flatbed', 'Refrigerated', 'Container carrier', 'Van', 'Other'];
-const FUELS = ['Diesel', 'Petrol', 'LPG', 'Electric', 'Hybrid'];
-const sCls = s => ({ Available: 's-ok', Assigned: 's-bl', Loading: 's-bl', 'In Transit': 's-bl', 'At Border': 's-wn', Delivered: 's-ok', Parked: 's-gr', Maintenance: 's-wn', Breakdown: 's-bd', Accident: 's-bd', Inactive: 's-gr' }[s] || 's-gr');
-const vcol = collection(db, 'vehicles');
-function docState(v) {
-  const ds = [v.insuranceExpiry, v.roadLicenceExpiry, v.cofExpiry].filter(Boolean).sort(); if (!ds.length) return ['s-gr', 'No dates'];
-  const t = today(), soon = new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10);
-  return ds[0] < t ? ['s-bd', 'Expired'] : ds[0] <= soon ? ['s-wn', 'Expiring'] : ['s-ok', 'Valid'];
-}
-
-/* ============ DASHBOARD ============ */
-async function viewDashboard() {
-  const v = $('#view');
-  const counts = await Promise.all(STATUS.map(s => getCountFromServer(query(vcol, where('status', '==', s))).then(r => r.data().count)));
-  const c = Object.fromEntries(STATUS.map((s, i) => [s, counts[i]])), total = counts.reduce((a, b) => a + b, 0);
-  const active = c['Assigned'] + c['Loading'] + c['In Transit'] + c['At Border'], max = Math.max(1, ...counts);
-  const soon = new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10), exp = new Map();
-  for (const [f, label] of [['insuranceExpiry', 'Insurance'], ['roadLicenceExpiry', 'Road licence'], ['cofExpiry', 'Certificate of fitness']]) {
-    const sn = await getDocs(query(vcol, where(f, '<=', soon), limit(50)));
-    sn.forEach(d => { const x = d.data(); if (x[f]) exp.set(d.id + f, { reg: x.registration, fid: x.fleetId, label, date: x[f] }); });
-  }
-  const alerts = [...exp.values()].sort((a, b) => a.date.localeCompare(b.date));
-  let dn = null; try { if (can('drivers', 'view')) dn = (await getCountFromServer(collection(db, 'drivers'))).data().count; } catch (e) {}
-  const k = (ic, n, l) => `<div class="card kpi"><div class="ic"><i class="fa-solid fa-${ic}"></i></div><div><b>${n}</b><span>${l}</span></div></div>`;
-  v.innerHTML = `<div class="grid kpis">${k('truck', total, 'Total vehicles')}${k('route', active, 'Active on operations')}${k('truck-fast', c['In Transit'], 'In transit')}${k('flag', c['At Border'], 'At border')}${k('square-parking', c['Parked'], 'Parked')}${k('screwdriver-wrench', c['Maintenance'] + c['Breakdown'], 'Maintenance / breakdown')}${k('circle-check', c['Available'], 'Available')}${dn != null ? k('id-card', dn, 'Registered drivers') : ''}</div>
-  <div class="grid two" style="margin-top:16px"><div class="card"><h3><i class="fa-solid fa-chart-simple" style="color:var(--b3)"></i>Fleet status</h3>${total ? `<div class="bars">${STATUS.map((s, i) => `<div class="row"><span>${s}</span><div class="tr"><i style="width:${counts[i] / max * 100}%"></i></div><b>${counts[i]}</b></div>`).join('')}</div>` : `<div class="empty"><i class="fa-solid fa-truck"></i>No vehicles yet.<br><a href="#/fleet">Add your first vehicle</a></div>`}</div>
-  <div class="card"><h3><i class="fa-solid fa-bell" style="color:var(--warn)"></i>Document alerts</h3>${alerts.length ? alerts.slice(0, 12).map(a => `<div style="display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line)"><div><b>${esc(a.reg)}</b><div style="color:var(--mut);font-size:12px">${a.label}</div></div><span class="badge ${a.date < today() ? 's-bd' : 's-wn'}">${a.date < today() ? 'Expired' : 'Due'} ${fmtD(a.date)}</span></div>`).join('') : `<div class="empty"><i class="fa-solid fa-shield-check"></i>No documents expiring in the next 30 days.</div>`}</div></div>
-  <div class="card" style="margin-top:16px"><h3><i class="fa-solid fa-circle-info" style="color:var(--b3)"></i>Data you see here</h3><p style="color:var(--mut);line-height:1.6">Every number comes from your Firestore records. Trips, fuel, drivers and revenue appear here when those modules are built (see Roadmap). Live GPS positions need a connected tracker, so none are shown until one is.</p></div>`;
-}
-
-/* ============ FLEET ============ */
-const FS = { rows: [], last: null, done: false, status: '', q: '', loading: false };
-async function viewFleet() {
-  FS.rows = []; FS.last = null; FS.done = false;
-  $('#view').innerHTML = `<div class="tools"><div class="f"><i class="fa-solid fa-magnifying-glass"></i><div><label>Search registration</label><input id="fq" placeholder="e.g. AEX 1234" autocomplete="off"></div></div><div class="f s"><i class="fa-solid fa-filter"></i><div><label>Status</label><select id="fs"><option value="">All</option>${STATUS.map(s => `<option>${s}</option>`).join('')}</select></div></div>${can('fleet', 'write') ? '<button class="btn" id="fa"><i class="fa-solid fa-plus"></i>Add vehicle</button>' : ''}</div><div class="card" style="padding:0"><div class="tw"><table class="rt"><thead><tr><th>Fleet ID</th><th>Registration</th><th>Vehicle</th><th>Status</th><th>Driver</th><th>Mileage</th><th>Documents</th><th></th></tr></thead><tbody id="fb"></tbody></table></div><div id="fm" style="text-align:center;padding:14px"></div></div>`;
-  let tm; $('#fq').oninput = e => { clearTimeout(tm); tm = setTimeout(() => { FS.q = e.target.value.trim().toUpperCase(); FS.rows = []; FS.last = null; FS.done = false; loadVehicles(); }, 350); };
-  $('#fs').onchange = e => { FS.status = e.target.value; FS.rows = []; FS.last = null; FS.done = false; loadVehicles(); };
-  if ($('#fa')) $('#fa').onclick = () => vehicleForm();
-  FS.q = ''; FS.status = ''; await loadVehicles();
-}
-async function loadVehicles() {
-  if (FS.loading || FS.done) return; FS.loading = true; const tb = $('#fb'); if (!tb) return;
-  try {
-    let q;
-    if (FS.q) q = [orderBy('registrationUpper'), where('registrationUpper', '>=', FS.q), where('registrationUpper', '<=', FS.q + '\uf8ff')];
-    else if (FS.status) q = [where('status', '==', FS.status)]; else q = [orderBy('fleetId')];
-    const parts = [...q, ...(FS.last ? [startAfter(FS.last)] : []), limit(25)];
-    const sn = await getDocs(query(vcol, ...parts));
-    sn.forEach(d => { if (!FS.q || !FS.status || d.data().status === FS.status) FS.rows.push({ id: d.id, ...d.data() }); });
-    FS.last = sn.docs[sn.docs.length - 1] || FS.last; if (sn.size < 25) FS.done = true;
-    drawVehicles();
-  } catch (e) { $('#fm').innerHTML = `<span style="color:var(--bad)">${esc(errMsg(e))}</span>`; toast(errMsg(e), 'err'); }
-  FS.loading = false;
-}
-function drawVehicles() {
-  const tb = $('#fb'); if (!tb) return;
-  tb.innerHTML = FS.rows.length ? FS.rows.map(v => { const [dc, dl] = docState(v); return `<tr><td data-l="Fleet ID"><b>${esc(v.fleetId)}</b></td><td data-l="Registration">${esc(v.registration)}</td><td data-l="Vehicle">${esc([v.make, v.model, v.year].filter(Boolean).join(' '))}<div style="color:var(--mut);font-size:12px">${esc(v.type || '')}</div></td><td data-l="Status">${can('fleet', 'status') ? `<select class="sst badge ${sCls(v.status)}" data-id="${v.id}" style="border:0;padding:5px 8px">${STATUS.map(s => `<option ${s === v.status ? 'selected' : ''}>${s}</option>`).join('')}</select>` : `<span class="badge ${sCls(v.status)}">${esc(v.status)}</span>`}</td><td data-l="Driver">${esc(v.driverName || '—')}</td><td data-l="Mileage">${v.mileage != null ? Number(v.mileage).toLocaleString() + ' km' : '—'}</td><td data-l="Documents"><span class="badge ${dc}">${dl}</span></td><td><div class="act">${can('fleet', 'write') ? `<button class="btn sm ghost" data-e="${v.id}" aria-label="Edit"><i class="fa-solid fa-pen"></i></button>` : ''}${can('fleet', 'del') ? `<button class="btn sm red" data-d="${v.id}" aria-label="Delete"><i class="fa-solid fa-trash"></i></button>` : ''}</div></td></tr>`; }).join('') : `<tr><td colspan="8"><div class="empty"><i class="fa-solid fa-truck"></i>${FS.q || FS.status ? 'No vehicles match your search.' : 'No vehicles yet. Add your first vehicle to get started.'}</div></td></tr>`;
-  $('#fm').innerHTML = FS.done ? '' : '<button class="btn ghost" id="lm">Load more</button>'; if ($('#lm')) $('#lm').onclick = loadVehicles;
-  tb.querySelectorAll('[data-e]').forEach(b => b.onclick = () => vehicleForm(FS.rows.find(r => r.id === b.dataset.e)));
-  tb.querySelectorAll('[data-d]').forEach(b => b.onclick = () => deleteVehicle(FS.rows.find(r => r.id === b.dataset.d)));
-  tb.querySelectorAll('.sst').forEach(s => s.onchange = () => changeStatus(FS.rows.find(r => r.id === s.dataset.id), s.value, s));
-}
-async function changeStatus(v, ns, el) {
-  const old = v.status; try { await updateDoc(doc(db, 'vehicles', v.id), { status: ns, updatedAt: serverTimestamp(), updatedBy: S.user.uid }); v.status = ns; el.className = 'sst badge ' + sCls(ns); await audit('UPDATE_STATUS', 'vehicle', v.id, { status: { from: old, to: ns }, vehicle: v.registration }); toast(`${v.registration}: ${ns}`); }
-  catch (e) { el.value = old; toast(errMsg(e), 'err'); }
-}
-async function deleteVehicle(v) {
-  if (!await ask('Delete vehicle?', `${v.registration} (${v.fleetId}) will be permanently removed. This cannot be undone.`, 'Delete', true)) return;
-  try { await deleteDoc(doc(db, 'vehicles', v.id)); await audit('DELETE', 'vehicle', v.id, { registration: { from: v.registration, to: null }, fleetId: { from: v.fleetId, to: null } }); FS.rows = FS.rows.filter(r => r.id !== v.id); drawVehicles(); toast('Vehicle deleted.'); } catch (e) { toast(errMsg(e), 'err'); }
-}
-function validateVehicle(d) {
-  const e = []; const yr = new Date().getFullYear();
-  if (!d.fleetId) e.push('Fleet ID is required.'); if (!d.registration) e.push('Registration number is required.'); else if (!/^[A-Za-z0-9 \-]{3,15}$/.test(d.registration)) e.push('Registration must be 3 to 15 letters, numbers, spaces or dashes.');
-  if (!d.make) e.push('Make is required.'); if (!d.model) e.push('Model is required.');
-  if (d.year != null && (!Number.isInteger(d.year) || d.year < 1980 || d.year > yr + 1)) e.push(`Year must be between 1980 and ${yr + 1}.`);
-  if (d.vin && !/^[A-HJ-NPR-Z0-9]{17}$/i.test(d.vin)) e.push('VIN must be 17 characters (no I, O or Q).');
-  for (const [k, l] of [['mileage', 'Mileage'], ['tankLitres', 'Tank capacity'], ['purchasePrice', 'Purchase price'], ['currentValue', 'Current value']]) if (d[k] != null && (isNaN(d[k]) || d[k] < 0)) e.push(`${l} must be a positive number.`);
-  for (const [k, l] of [['insuranceExpiry', 'Insurance expiry'], ['roadLicenceExpiry', 'Road licence expiry'], ['cofExpiry', 'Fitness certificate expiry'], ['purchaseDate', 'Purchase date']]) if (d[k] && (!/^\d{4}-\d{2}-\d{2}$/.test(d[k]) || isNaN(new Date(d[k])))) e.push(`${l} is not a valid date.`);
-  if (d.purchaseDate && d.purchaseDate > today()) e.push('Purchase date cannot be in the future.');
-  return e;
-}
-async function vehicleForm(v) {
-  let drivers = []; try { const ds = await getDocs(query(collection(db, 'drivers'), orderBy('fullName'), limit(200))); drivers = ds.docs.filter(d => (d.data().employmentStatus || 'Active') === 'Active').map(d => ({ id: d.id, name: d.data().fullName })); } catch (e) {}
-  const x = v || { status: 'Available', fuelType: 'Diesel', type: TYPES[0] };
-  const m = modal(`<h2><i class="fa-solid fa-truck" style="color:var(--b3)"></i>${v ? 'Edit vehicle' : 'Add vehicle'}</h2><div id="ve"></div><form id="vf" novalidate><div class="fg">
-  ${field('hashtag', 'Fleet ID *', 'fleetId', x.fleetId, 'text', 'maxlength="20"')}${field('id-card', 'Registration no. *', 'registration', x.registration, 'text', 'maxlength="15"')}${field('industry', 'Make *', 'make', x.make)}${field('truck', 'Model *', 'model', x.model)}${field('calendar', 'Year', 'year', x.year, 'number')}${selectF('layer-group', 'Vehicle type', 'type', TYPES, x.type)}
-  ${field('barcode', 'VIN / chassis no.', 'vin', x.vin, 'text', 'maxlength="17"')}${field('gear', 'Engine number', 'engineNo', x.engineNo)}${selectF('gas-pump', 'Fuel type', 'fuelType', FUELS, x.fuelType)}${field('droplet', 'Tank capacity (L)', 'tankLitres', x.tankLitres, 'number', 'min="0"')}
-  ${field('gauge', 'Mileage (km)', 'mileage', x.mileage, 'number', 'min="0"')}${selectF('flag', 'Status', 'status', STATUS, x.status)}<div class="f"><i class="fa-solid fa-user-tie"></i><div><label>Assigned driver</label><select name="driverId"><option value="">— None —</option>${drivers.map(z => `<option value="${esc(z.id)}" ${z.id === x.driverId ? 'selected' : ''}>${esc(z.name)}</option>`).join('')}</select></div></div>${field('trailer', 'Assigned trailer', 'trailer', x.trailer)}
-  ${field('location-dot', 'Last known location (manual)', 'lastKnownLocation', x.lastKnownLocation)}${field('satellite-dish', 'GPS device ID', 'gpsDeviceId', x.gpsDeviceId)}
-  ${field('shield', 'Insurance expiry', 'insuranceExpiry', x.insuranceExpiry, 'date')}${field('road', 'Road licence expiry', 'roadLicenceExpiry', x.roadLicenceExpiry, 'date')}${field('file-circle-check', 'Fitness cert. expiry', 'cofExpiry', x.cofExpiry, 'date')}${field('calendar-day', 'Purchase date', 'purchaseDate', x.purchaseDate, 'date')}
-  ${field('sack-dollar', 'Purchase price (USD)', 'purchasePrice', x.purchasePrice, 'number', 'min="0" step="0.01"')}${field('chart-line', 'Current value (USD)', 'currentValue', x.currentValue, 'number', 'min="0" step="0.01"')}
-  <div class="f full"><i class="fa-solid fa-note-sticky"></i><div><label>Notes</label><textarea name="notes">${esc(x.notes || '')}</textarea></div></div></div>
-  <div class="mf"><button type="button" class="btn ghost" id="vx">Cancel</button><button class="btn" id="vs"><i class="fa-solid fa-floppy-disk"></i>${v ? 'Save changes' : 'Add vehicle'}</button></div></form>`, true);
-  $('#vx').onclick = closeModal;
-  $('#vf').onsubmit = async e => {
-    e.preventDefault(); const f = new FormData(e.target), g = k => (f.get(k) || '').toString().trim();
-    const d = { fleetId: g('fleetId'), registration: g('registration').toUpperCase(), make: g('make'), model: g('model'), year: num(g('year')), type: g('type'), vin: g('vin').toUpperCase(), engineNo: g('engineNo'), fuelType: g('fuelType'), tankLitres: num(g('tankLitres')), mileage: num(g('mileage')), status: g('status'), driverId: g('driverId'), driverName: (drivers.find(z => z.id === g('driverId')) || {}).name || '', trailer: g('trailer'), lastKnownLocation: g('lastKnownLocation'), gpsDeviceId: g('gpsDeviceId'), insuranceExpiry: g('insuranceExpiry'), roadLicenceExpiry: g('roadLicenceExpiry'), cofExpiry: g('cofExpiry'), purchaseDate: g('purchaseDate'), purchasePrice: num(g('purchasePrice')), currentValue: num(g('currentValue')), notes: g('notes') };
-    const errs = validateVehicle(d); if (errs.length) { $('#ve').innerHTML = `<div class="msg err">${errs.map(esc).join('<br>')}</div>`; return; }
-    d.registrationUpper = d.registration.replace(/\s+/g, ' '); $('#vs').disabled = true;
-    try {
-      if (d.driverId) { const da = await getDocs(query(vcol, where('driverId', '==', d.driverId), limit(2))); if (da.docs.some(z => z.id !== (v && v.id))) throw { message: 'This driver is already assigned to another vehicle.' }; }
-      for (const [k, l] of [['registrationUpper', 'registration'], ['fleetId', 'Fleet ID']]) { const dup = await getDocs(query(vcol, where(k, '==', d[k]), limit(2))); if (dup.docs.some(z => z.id !== (v && v.id))) throw { message: `A vehicle with this ${l} already exists.` }; }
-      if (v) { const ch = diffObj(v, d); if (!Object.keys(ch).length) { closeModal(); return toast('No changes to save.'); } await updateDoc(doc(db, 'vehicles', v.id), { ...d, updatedAt: serverTimestamp(), updatedBy: S.user.uid }); await audit('UPDATE', 'vehicle', v.id, { ...ch, vehicle: d.registration }); toast('Vehicle updated.'); }
-      else { const r = await addDoc(vcol, { ...d, createdAt: serverTimestamp(), createdBy: S.user.uid, updatedAt: serverTimestamp(), updatedBy: S.user.uid }); await audit('CREATE', 'vehicle', r.id, { vehicle: { from: null, to: d.registration } }); toast('Vehicle added.'); }
-      closeModal(); viewFleet();
-    } catch (er) { $('#ve').innerHTML = `<div class="msg err">${esc(errMsg(er))}</div>`; $('#vs').disabled = false; }
-  };
-}
-
-/* ============ STAFF & ROLES ============ */
-async function viewStaff() {
-  const sn = await getDocs(query(collection(db, 'users'), orderBy('name'), limit(200))), rows = sn.docs.map(d => ({ id: d.id, ...d.data() }));
-  $('#view').innerHTML = `<div class="tools"><div style="flex:1;color:var(--mut)">${rows.length} staff account${rows.length === 1 ? '' : 's'}</div>${can('staff', 'write') ? '<button class="btn" id="sa"><i class="fa-solid fa-user-plus"></i>Add staff</button>' : ''}</div><div class="card" style="padding:0"><div class="tw"><table class="rt"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>${rows.map(u => `<tr><td data-l="Name"><b>${esc(u.name)}</b>${u.id === S.user.uid ? ' <span class="badge s-bl">You</span>' : ''}</td><td data-l="Email">${esc(u.email)}</td><td data-l="Phone">${esc(u.phone || '—')}</td><td data-l="Role">${u.id === S.user.uid ? roleLabel(u.role) : `<select class="rsel" data-id="${u.id}" style="border:1px solid var(--line);border-radius:10px;padding:6px">${ROLES.filter(r => r !== 'SUPER_ADMIN' || S.profile.role === 'SUPER_ADMIN').map(r => `<option value="${r}" ${r === u.role ? 'selected' : ''}>${roleLabel(r)}</option>`).join('')}</select>`}</td><td data-l="Status"><span class="badge ${u.active ? 's-ok' : 's-gr'}">${u.active ? 'Active' : 'Deactivated'}</span></td><td><div class="act">${u.id !== S.user.uid ? `<button class="btn sm ${u.active ? 'red' : 'ghost'}" data-t="${u.id}">${u.active ? 'Deactivate' : 'Activate'}</button>` : ''}</div></td></tr>`).join('')}</tbody></table></div></div>`;
-  if ($('#sa')) $('#sa').onclick = staffForm;
-
-  document.querySelectorAll('.rsel').forEach(s => s.onchange = async () => { const u = rows.find(r => r.id === s.dataset.id); if (!await ask('Change role?', `${u.name} will become ${roleLabel(s.value)}.`, 'Change')) { s.value = u.role; return; } try { await updateDoc(doc(db, 'users', u.id), { role: s.value }); await audit('CHANGE_ROLE', 'user', u.id, { role: { from: u.role, to: s.value }, user: u.email }); u.role = s.value; toast('Role updated.'); } catch (e) { s.value = u.role; toast(errMsg(e), 'err'); } });
-  document.querySelectorAll('[data-t]').forEach(b => b.onclick = async () => { const u = rows.find(r => r.id === b.dataset.t); if (!await ask(u.active ? 'Deactivate account?' : 'Activate account?', `${u.name} will ${u.active ? 'lose' : 'regain'} access to the system.`, u.active ? 'Deactivate' : 'Activate', u.active)) return; try { await updateDoc(doc(db, 'users', u.id), { active: !u.active }); await audit(u.active ? 'DEACTIVATE_USER' : 'ACTIVATE_USER', 'user', u.id, { user: u.email }); viewStaff(); } catch (e) { toast(errMsg(e), 'err'); } });
-}
-function staffForm() {
-  modal(`<h2><i class="fa-solid fa-user-plus" style="color:var(--b3)"></i>Add staff member</h2><div id="se"></div><div class="msg info">Staff receive two emails (verify + set password). You never see or share a password. <b>Drivers</b> are registered on the <a href="#/drivers" onclick="document.querySelector('#modalRoot').innerHTML=''">Drivers page</a>.</div><form id="stf">${field('user', 'Full name', 'name', '', 'text', 'required')}${field('envelope', 'Email', 'email', '', 'email', 'required')}${field('phone', 'Phone', 'phone', '', 'tel')}${selectF('user-shield', 'Role', 'role', ROLES.filter(r => r !== 'DRIVER' && (r !== 'SUPER_ADMIN' || S.profile.role === 'SUPER_ADMIN')), 'VIEWER')}<div class="mf"><button type="button" class="btn ghost" id="sx">Cancel</button><button class="btn" id="ss">Create account</button></div></form>`);
-  $('#sx').onclick = closeModal;
-  $('#stf').onsubmit = async e => {
-    e.preventDefault(); const f = new FormData(e.target), name = f.get('name').trim(), email = f.get('email').trim(), role = f.get('role'); if (name.length < 2) return $('#se').innerHTML = '<div class="msg err">Enter the full name.</div>'; $('#ss').disabled = true;
-    if (role === 'DRIVER') {
-      try { const id = email.toLowerCase(); const ex = await getDoc(doc(db, 'driverInvites', id)); if (ex.exists() && ex.data().claimed) throw { message: 'This driver is already registered.' }; await setDoc(doc(db, 'driverInvites', id), { email: id, claimed: false, createdAt: serverTimestamp(), createdBy: S.user.uid }); await audit('PREREGISTER_DRIVER', 'driver', id, { driver: { from: null, to: email }, name: name }); toast('Driver pre-registered. Tell them to register in the Driver app with this email.'); closeModal(); viewStaff(); }
-      catch (er) { $('#se').innerHTML = `<div class="msg err">${esc(errMsg(er))}</div>`; $('#ss').disabled = false; }
-      return;
-    }
-    let sec; try {
-      sec = initializeApp(firebaseConfig, 'sec' + Date.now()); const sa = getAuth(sec), pw = crypto.getRandomValues(new Uint32Array(5)).join('-') + 'Aa1!';
-      const c = await createUserWithEmailAndPassword(sa, email, pw);
-      await setDoc(doc(db, 'users', c.user.uid), { name, email, phone: f.get('phone').trim(), role, active: true, createdAt: serverTimestamp(), createdBy: S.user.uid });
-      await sendEmailVerification(c.user); await sendPasswordResetEmail(sa, email); await signOut(sa);
-      await audit('CREATE_USER', 'user', c.user.uid, { user: { from: null, to: email }, role: { from: null, to: role } }); toast('Staff account created. Emails sent.'); closeModal(); viewStaff();
-    } catch (er) { $('#se').innerHTML = `<div class="msg err">${esc(errMsg(er))}</div>`; $('#ss').disabled = false; }
-  };
-}
-
-/* ============ AUDIT LOG ============ */
-async function viewAudit() {
-  const sn = await getDocs(query(collection(db, 'auditLogs'), orderBy('ts', 'desc'), limit(150))), rows = sn.docs.map(d => ({ id: d.id, ...d.data() }));
-  const sum = c => Object.entries(c || {}).map(([k, v]) => v && typeof v === 'object' && 'to' in v ? `${esc(k)}: ${esc(v.from ?? '—')} → <b>${esc(v.to ?? '—')}</b>` : '').filter(Boolean).slice(0, 4).join('<br>');
-  $('#view').innerHTML = `<div class="tools"><div class="f"><i class="fa-solid fa-magnifying-glass"></i><div><label>Filter log</label><input id="aq" placeholder="user, action, vehicle…"></div></div></div><div class="card" style="padding:0"><div class="tw"><table class="rt"><thead><tr><th>When</th><th>User</th><th>Action</th><th>Entity</th><th>Changes</th></tr></thead><tbody id="ab">${rows.length ? rows.map(r => `<tr><td data-l="When">${fmtTs(r.ts)}</td><td data-l="User"><b>${esc(r.userName)}</b><div style="color:var(--mut);font-size:12px">${roleLabel(r.role)}</div></td><td data-l="Action"><span class="badge s-bl">${esc(r.action)}</span></td><td data-l="Entity">${esc(r.entity)}</td><td data-l="Changes" style="font-size:12.5px">${sum(r.changes) || '—'}</td></tr>`).join('') : '<tr><td colspan="5"><div class="empty"><i class="fa-solid fa-clipboard-list"></i>No activity recorded yet.</div></td></tr>'}</tbody></table></div></div><p style="color:var(--mut);margin-top:10px;font-size:12.5px">Showing the latest 150 entries. Entries cannot be edited or deleted.</p>`;
-  $('#aq').oninput = e => { const q = e.target.value.toLowerCase(); document.querySelectorAll('#ab tr').forEach(t => t.classList.toggle('hidden', !t.textContent.toLowerCase().includes(q))); };
-}
-
-
-/* ============ LIVE TRACKING ============ */
-const gcol = collection(db, 'gpsLive');
-let MAP = null, LIVE = {}, MK = {}, unsubLive = null, tickT = null, HIST = null, SEL = '', FIRST = true, BORDERS = null;
-function cleanup() { if (unsubLive) { unsubLive(); unsubLive = null; } clearInterval(tickT); if (MAP) { MAP.remove(); MAP = null; } MK = {}; LIVE = {}; HIST = null; SEL = ''; FIRST = true; BORDERS = null; }
-const distM = (a, b) => { const R = 6371000, r = Math.PI / 180, x = (b.lng - a.lng) * r * Math.cos((a.lat + b.lat) / 2 * r), y = (b.lat - a.lat) * r; return Math.sqrt(x * x + y * y) * R; };
-const tsMs = l => l.ts && l.ts.toMillis ? l.ts.toMillis() : Date.now();
-const ago = ms => { const m = Math.round((Date.now() - ms) / 60000); return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' h ago' : Math.round(m / 1440) + ' d ago'; };
-const OFFLINE_MS = 5 * 60 * 1000;
-function liveState(l) { const lim = Number(localStorage.getItem('fc_limit')) || 100; if (Date.now() - tsMs(l) > OFFLINE_MS) return ['of', 'Offline', 's-gr']; if (l.speed != null && l.speed > lim) return ['ov', 'Overspeed', 's-bd']; if (l.speed != null && l.speed >= 3) return ['mv', 'Moving', 's-bl']; return ['st', 'Stopped', 's-wn']; }
-const BORDER_POSTS = [['Beitbridge', -22.2186, 30.0003], ['Chirundu', -16.0333, 28.85], ['Plumtree / Ramokgwebana', -20.4833, 27.8167], ['Forbes / Machipanda', -18.9833, 32.6833], ['Nyamapanda', -16.9667, 32.8667], ['Kazungula', -17.7889, 25.2678], ['Victoria Falls', -17.9325, 25.842]];
-async function viewTracking() {
-  $('#view').innerHTML = `<div class="grid kpis" id="tk"></div><div class="tools" style="margin-top:16px"><div class="f s"><i class="fa-solid fa-gauge-high"></i><div><label>Speed limit (km/h)</label><input id="lim" type="number" min="20" max="200" value="${Number(localStorage.getItem('fc_limit')) || 100}"></div></div><label class="chip"><input type="checkbox" id="bp" checked> Border posts (approx.)</label><button class="btn ghost" id="fit"><i class="fa-solid fa-expand"></i>Fit all</button><button class="btn ghost hidden" id="hc"><i class="fa-solid fa-xmark"></i>Clear route</button></div>
-  <div class="trk"><div class="card lst" id="tl"><div class="spin"></div></div><div id="map"></div></div><p style="color:var(--mut);font-size:12.5px;margin-top:10px">Positions come only from real sources: driver phones sharing from <b>My Tracker</b>, or GPS devices connected through the ingest Worker. A vehicle with no report in 5 minutes is shown as Offline at its last known position.</p>`;
-  MAP = L.map('map', { zoomControl: true }).setView([-19.0, 29.8], 6);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }).addTo(MAP);
-  BORDERS = L.layerGroup(BORDER_POSTS.map(b => L.circleMarker([b[1], b[2]], { radius: 7, color: '#0B3D91', weight: 2, fillColor: '#FFD166', fillOpacity: .95 }).bindTooltip(b[0] + ' (approx.)'))).addTo(MAP);
-  $('#bp').onchange = e => e.target.checked ? BORDERS.addTo(MAP) : MAP.removeLayer(BORDERS);
-  $('#lim').onchange = e => { localStorage.setItem('fc_limit', e.target.value); paintLive(); };
-  $('#fit').onclick = fitAll; $('#hc').onclick = clearHist;
-  unsubLive = onSnapshot(gcol, sn => { sn.docChanges().forEach(c => { if (c.type === 'removed') delete LIVE[c.doc.id]; else LIVE[c.doc.id] = { id: c.doc.id, ...c.doc.data() }; }); paintLive(); if (FIRST && Object.keys(LIVE).length) { FIRST = false; fitAll(); } }, e => { $('#tl').innerHTML = `<div class="empty"><i class="fa-solid fa-circle-exclamation"></i>${esc(errMsg(e))}</div>`; });
-  tickT = setInterval(paintLive, 15000);
-}
-function fitAll() { const pts = Object.values(LIVE).map(l => [l.lat, l.lng]); if (pts.length && MAP) MAP.fitBounds(pts, { padding: [50, 50], maxZoom: 14 }); }
-function paintLive() {
-  if (!MAP) return; const rows = Object.values(LIVE).sort((a, b) => String(a.registration).localeCompare(b.registration)), st = rows.map(l => liveState(l)[0]);
-  const k = (ic, n, l) => `<div class="card kpi"><div class="ic"><i class="fa-solid fa-${ic}"></i></div><div><b>${n}</b><span>${l}</span></div></div>`;
-  $('#tk').innerHTML = k('satellite-dish', st.filter(x => x !== 'of').length, 'Reporting now') + k('truck-fast', st.filter(x => x === 'mv').length, 'Moving') + k('circle-pause', st.filter(x => x === 'st').length, 'Stopped') + k('triangle-exclamation', st.filter(x => x === 'ov').length, 'Overspeed') + k('plug-circle-xmark', st.filter(x => x === 'of').length, 'Offline');
-  rows.forEach((l, i) => {
-    const [c, lab] = liveState(l), ic = L.divIcon({ className: '', html: `<div class="mk ${c}"><i class="fa-solid fa-truck"></i></div>`, iconSize: [34, 34], iconAnchor: [17, 17] });
-    const pop = `<b>${esc(l.registration)}</b> (${esc(l.fleetId || '')})<br>${esc(l.driverName || 'No driver')}<br>${lab}${l.speed != null ? ' · ' + Math.round(l.speed) + ' km/h' : ''}<br>Accuracy ±${l.accuracy ?? '?'} m · ${esc(l.source || '')}<br>Updated ${ago(tsMs(l))}`;
-    if (MK[l.id]) { MK[l.id].setLatLng([l.lat, l.lng]).setIcon(ic).setPopupContent(pop); } else MK[l.id] = L.marker([l.lat, l.lng], { icon: ic }).addTo(MAP).bindPopup(pop);
-  });
-  Object.keys(MK).forEach(id => { if (!LIVE[id]) { MAP.removeLayer(MK[id]); delete MK[id]; } });
-  $('#tl').innerHTML = rows.length ? rows.map(l => { const [c, lab, b] = liveState(l); return `<div class="vi ${SEL === l.id ? 'on' : ''}" data-id="${l.id}"><div class="mk2 ${c}"><i class="fa-solid fa-truck"></i></div><div style="min-width:0"><b>${esc(l.registration)}</b><small>${esc(l.driverName || 'No driver')}</small><small>${ago(tsMs(l))} · ${esc(l.source === 'driver-phone' ? 'Driver phone' : l.source || '')}</small></div><div class="r"><span class="badge ${b}">${lab}</span><small>${l.speed != null ? Math.round(l.speed) + ' km/h' : '—'}</small><button class="btn sm ghost" data-h="${l.id}" style="margin-top:6px"><i class="fa-solid fa-route"></i></button></div></div>`; }).join('') : `<div class="empty"><i class="fa-solid fa-satellite-dish"></i>No vehicle is reporting yet.<br><br>1. Create a <b>Driver</b> staff account.<br>2. Assign the driver to a vehicle in Fleet.<br>3. The driver opens <b>My Tracker</b> and taps Start.<br><br>GPS devices connect through the ingest Worker.</div>`;
-  document.querySelectorAll('.vi').forEach(e => e.onclick = ev => { if (ev.target.closest('[data-h]')) return; SEL = e.dataset.id; const l = LIVE[SEL]; MAP.flyTo([l.lat, l.lng], 15); MK[SEL].openPopup(); paintLive(); });
-  document.querySelectorAll('[data-h]').forEach(b => b.onclick = () => histForm(b.dataset.h));
-}
-function histForm(id) {
-  const l = LIVE[id]; modal(`<h2><i class="fa-solid fa-route" style="color:var(--b3)"></i>Route history: ${esc(l.registration)}</h2><div id="he"></div>${selectF('clock', 'Period', 'per', ['Last 6 hours', 'Last 24 hours', 'Last 7 days'], 'Last 24 hours')}<div class="mf"><button class="btn ghost" id="hx">Cancel</button><button class="btn" id="hs"><i class="fa-solid fa-route"></i>Show route</button></div>`);
-  $('#hx').onclick = closeModal;
-  $('#hs').onclick = async () => {
-    const h = { 'Last 6 hours': 6, 'Last 24 hours': 24, 'Last 7 days': 168 }[document.querySelector('[name=per]').value]; $('#hs').disabled = true;
-    try {
-      const sn = await getDocs(query(collection(db, 'gpsPositions'), where('vehicleId', '==', id), where('ts', '>=', Timestamp.fromMillis(Date.now() - h * 36e5)), orderBy('ts'), limit(2000)));
-      const pts = sn.docs.map(d => d.data()); if (pts.length < 2) { $('#he').innerHTML = '<div class="msg info">Not enough recorded positions in that period.</div>'; $('#hs').disabled = false; return; }
-      clearHist(); const ll = pts.map(p => [p.lat, p.lng]); let km = 0; for (let i = 1; i < pts.length; i++) km += distM(pts[i - 1], pts[i]) / 1000;
-      HIST = L.layerGroup([L.polyline(ll, { color: '#1769E0', weight: 5, opacity: .85 }), L.circleMarker(ll[0], { radius: 8, color: '#fff', weight: 3, fillColor: '#0E9F6E', fillOpacity: 1 }).bindTooltip('Start ' + fmtTs(pts[0].ts)), L.circleMarker(ll[ll.length - 1], { radius: 8, color: '#fff', weight: 3, fillColor: '#DC2626', fillOpacity: 1 }).bindTooltip('End ' + fmtTs(pts[pts.length - 1].ts))]).addTo(MAP);
-      MAP.fitBounds(ll, { padding: [40, 40] }); $('#hc').classList.remove('hidden'); closeModal(); toast(`${pts.length} points · ${km.toFixed(1)} km`);
-    } catch (e) { $('#he').innerHTML = `<div class="msg err">${esc(errMsg(e))}</div>`; $('#hs').disabled = false; console.error(e); }
-  };
-}
-function clearHist() { if (HIST && MAP) { MAP.removeLayer(HIST); HIST = null; } $('#hc')?.classList.add('hidden'); }
-
-/* ============ DRIVER PHONE TRACKER ============ */
-const TRK = { watch: null, wake: null, vehicle: null, lastLive: 0, lastHist: null, sent: 0, on: false, fix: null, msg: '' };
-async function viewDriver() {
-  const sn = S.profile.driverId ? await getDocs(query(vcol, where('driverId', '==', S.profile.driverId), limit(1))) : { docs: [] }; TRK.vehicle = sn.docs[0] ? { id: sn.docs[0].id, ...sn.docs[0].data() } : null; const v = TRK.vehicle;
-  if (!v) { $('#view').innerHTML = `<div class="card empty" style="max-width:520px;margin:auto"><i class="fa-solid fa-truck"></i>No vehicle is assigned to you yet.<br>Ask your fleet manager to assign you to a vehicle.</div>`; return; }
-  $('#view').innerHTML = `<div class="card" style="max-width:560px;margin:auto;text-align:center"><div class="badge s-bl" style="margin-bottom:10px">${esc(v.fleetId)}</div><h2 style="font-size:22px;font-weight:800">${esc(v.registration)}</h2><div style="color:var(--mut)">${esc([v.make, v.model].filter(Boolean).join(' '))}</div>
-  <button class="bigbtn" id="tb"></button><div id="tm"></div><div class="sg"><div><b id="ta">—</b><span>Accuracy</span></div><div><b id="ts">—</b><span>Speed</span></div><div><b id="tl2">—</b><span>Last sent</span></div></div>
-  <p style="color:var(--mut);font-size:12.5px;margin-top:16px;line-height:1.6">Keep this screen open and your phone unlocked while driving. Browsers pause GPS when the app is in the background or the phone is locked. Use a car charger. Sharing uses little data.</p></div>`;
-  $('#tb').onclick = () => TRK.on ? stopTrack() : startTrack(); paintTrk();
-}
-function paintTrk() {
-  const b = $('#tb'); if (!b) return; b.className = 'bigbtn' + (TRK.on ? ' on' : ''); b.innerHTML = TRK.on ? '<i class="fa-solid fa-stop"></i>Stop sharing' : '<i class="fa-solid fa-play"></i>Start sharing';
-  const f = TRK.fix; $('#ta').textContent = f ? '±' + Math.round(f.acc) + ' m' : '—'; $('#ts').textContent = f && f.spd != null ? Math.round(f.spd) + ' km/h' : '—'; $('#tl2').textContent = TRK.sent ? ago(TRK.sent) : '—';
-  $('#tm').innerHTML = TRK.msg ? `<div class="msg err">${esc(TRK.msg)}</div>` : TRK.on ? `<div class="msg ok"><i class="fa-solid fa-satellite-dish"></i> Sharing your live location with the control room.</div>` : '<div class="msg info">Not sharing. Tap Start when you begin your trip.</div>';
-}
+async function audit(action) { try { await addDoc(collection(db, 'auditLogs'), { userId: ME.id, userName: ME.name, userEmail: ME.email, role: ME.role, action, entity: 'vehicle', entityId: VEH.id, changes: { vehicle: { from: null, to: VEH.registration } }, ts: serverTimestamp() }); } catch (e) {} }
 async function startTrack() {
-  if (!('geolocation' in navigator)) { TRK.msg = 'This device or browser does not support GPS.'; return paintTrk(); }
-  try { if ('wakeLock' in navigator) TRK.wake = await navigator.wakeLock.request('screen'); } catch (e) {}
-  TRK.on = true; TRK.msg = ''; TRK.lastLive = 0; paintTrk(); audit('TRACKING_START', 'vehicle', TRK.vehicle.id, { vehicle: { from: null, to: TRK.vehicle.registration } });
-  TRK.watch = navigator.geolocation.watchPosition(onFix, e => { TRK.msg = { 1: 'Location permission denied. Allow location for this site in your browser settings, then try again.', 2: 'GPS signal not available. Move to open sky.', 3: 'GPS timed out. Retrying…' }[e.code] || 'GPS error.'; if (e.code === 1) stopTrack(true); paintTrk(); }, { enableHighAccuracy: true, maximumAge: 2000, timeout: 30000 });
+  if (!('geolocation' in navigator)) { T.msg = 'This phone or browser does not support GPS.'; return paint(); }
+  try { if ('wakeLock' in navigator) T.wake = await navigator.wakeLock.request('screen'); } catch (e) {}
+  T.on = true; T.msg = ''; T.lastLive = 0; sessionStorage.setItem('fc_on', '1'); paint(); audit('TRACKING_START');
+  T.watch = navigator.geolocation.watchPosition(onFix, (e) => { T.msg = { 1: 'Location is blocked. Allow location for this site in your browser settings, then tap Start trip again.', 2: 'No GPS signal. Move to open sky.', 3: 'GPS is slow. Still trying…' }[e.code] || 'GPS error.'; if (e.code === 1) stopTrack(true); paint(); }, { enableHighAccuracy: true, maximumAge: 2000, timeout: 30000 });
 }
-function stopTrack(keepMsg) {
-  if (TRK.watch != null) navigator.geolocation.clearWatch(TRK.watch); TRK.watch = null; try { TRK.wake && TRK.wake.release(); } catch (e) {} TRK.wake = null;
-  if (TRK.on && TRK.vehicle) audit('TRACKING_STOP', 'vehicle', TRK.vehicle.id, { vehicle: { from: TRK.vehicle.registration, to: null } }); TRK.on = false; if (!keepMsg) TRK.msg = ''; paintTrk();
+function stopTrack(keep) {
+  if (T.watch != null) navigator.geolocation.clearWatch(T.watch); T.watch = null; try { T.wake && T.wake.release(); } catch (e) {} T.wake = null;
+  const was = T.on; T.on = false; sessionStorage.removeItem('fc_on'); if (!keep) T.msg = ''; if (was && ME && VEH) audit('TRACKING_STOP'); paint();
 }
-document.addEventListener('visibilitychange', async () => { if (document.visibilityState === 'visible' && TRK.on && 'wakeLock' in navigator) { try { TRK.wake = await navigator.wakeLock.request('screen'); } catch (e) {} } });
+document.addEventListener('visibilitychange', async () => { if (document.visibilityState === 'visible' && T.on && 'wakeLock' in navigator) { try { T.wake = await navigator.wakeLock.request('screen'); } catch (e) {} } });
 async function onFix(p) {
-  const c = p.coords, now = Date.now(), v = TRK.vehicle; TRK.fix = { acc: c.accuracy, spd: c.speed != null ? c.speed * 3.6 : null };
-  if (c.accuracy > 150) { TRK.msg = `Weak GPS signal (±${Math.round(c.accuracy)} m). Waiting for a better fix…`; return paintTrk(); }
-  TRK.msg = ''; if (now - TRK.lastLive < 10000) return paintTrk(); TRK.lastLive = now;
+  const c = p.coords, now = Date.now(); T.fix = { acc: c.accuracy, spd: c.speed != null ? c.speed * 3.6 : null };
+  if (c.accuracy > 150) { T.msg = `Weak GPS (±${Math.round(c.accuracy)} m). Waiting for a better signal…`; return paint(); }
+  T.msg = ''; if (now - T.lastLive < 10000) return paint(); T.lastLive = now;
   const spd = c.speed != null && !isNaN(c.speed) ? Math.round(c.speed * 36) / 10 : null, hd = c.heading != null && !isNaN(c.heading) ? Math.round(c.heading) : null, lat = c.latitude, lng = c.longitude;
   try {
-    await setDoc(doc(db, 'gpsLive', v.id), { vehicleId: v.id, registration: v.registration, fleetId: v.fleetId || '', driverUid: S.user.uid, driverName: S.profile.name, lat, lng, speed: spd, heading: hd, accuracy: Math.round(c.accuracy), source: 'driver-phone', ts: serverTimestamp() }); TRK.sent = now;
-    const h = TRK.lastHist; if (!h || distM(h, { lat, lng }) > 100 || now - h.t > 300000) { await addDoc(collection(db, 'gpsPositions'), { vehicleId: v.id, lat, lng, speed: spd, heading: hd, source: 'driver-phone', ts: serverTimestamp() }); TRK.lastHist = { lat, lng, t: now }; }
-  } catch (e) { TRK.msg = 'Could not send location: ' + errMsg(e); }
-  paintTrk();
+    await setDoc(doc(db, 'gpsLive', VEH.id), { vehicleId: VEH.id, registration: VEH.registration, fleetId: VEH.fleetId || '', driverUid: ME.id, driverName: ME.name, lat, lng, speed: spd, heading: hd, accuracy: Math.round(c.accuracy), source: 'driver-phone', ts: serverTimestamp() });
+    T.sent = now; T.count++;
+    const h = T.hist; if (!h || dist(h, { lat, lng }) > 100 || now - h.t > 300000) { await addDoc(collection(db, 'gpsPositions'), { vehicleId: VEH.id, lat, lng, speed: spd, heading: hd, source: 'driver-phone', ts: serverTimestamp() }); T.hist = { lat, lng, t: now }; }
+  } catch (e) { T.msg = 'Could not send location: ' + errMsg(e); }
+  paint();
 }
-
-
-/* ============ DRIVERS (full profiles + registration PIN) ============ */
-const dcol = collection(db, 'drivers'), EMP = ['Active', 'On leave', 'Suspended', 'Terminated'], LCLASS = ['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Other'];
-const expBadge = d => { if (!d) return '<span class="badge s-gr">Not set</span>'; const t = today(), soon = new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10); return d < t ? `<span class="badge s-bd">Expired ${fmtD(d)}</span>` : d <= soon ? `<span class="badge s-wn">Due ${fmtD(d)}</span>` : `<span class="badge s-ok">${fmtD(d)}</span>`; };
-const newPin = () => String(crypto.getRandomValues(new Uint32Array(1))[0] % 900000 + 100000);
-const driverLink = () => new URL('fleet-driver.html', location.href).href;
-async function viewDrivers() {
-  const [ds, iv, vs] = await Promise.all([getDocs(query(dcol, orderBy('fullName'), limit(300))), getDocs(query(collection(db, 'driverInvites'), where('claimed', '==', false), limit(300))), getDocs(query(vcol, where('driverId', '!=', ''), limit(300)))]);
-  const rows = ds.docs.map(d => ({ id: d.id, ...d.data() })), pending = new Set(iv.docs.map(d => d.id)), veh = {}; vs.forEach(d => { const x = d.data(); if (x.driverId) veh[x.driverId] = x.registration; });
-  $('#view').innerHTML = `<div class="tools"><div class="f"><i class="fa-solid fa-magnifying-glass"></i><div><label>Search drivers</label><input id="dq" placeholder="name, employee ID, phone…"></div></div>${can('drivers', 'write') ? '<button class="btn" id="da"><i class="fa-solid fa-user-plus"></i>Register driver</button>' : ''}</div>
-  <div class="card" style="padding:0"><div class="tw"><table class="rt"><thead><tr><th>Driver</th><th>Employee ID</th><th>Phone</th><th>Licence</th><th>Medical</th><th>Vehicle</th><th>Employment</th><th>App access</th><th></th></tr></thead><tbody id="db">${rows.length ? rows.map(d => `<tr><td data-l="Driver"><b>${esc(d.fullName)}</b><div style="color:var(--mut);font-size:12px">${esc(d.email)}</div></td><td data-l="Employee ID">${esc(d.employeeId)}</td><td data-l="Phone">${esc(d.phone)}</td><td data-l="Licence">${esc(d.licenceClass || '')} ${expBadge(d.licenceExpiry)}</td><td data-l="Medical">${expBadge(d.medicalExpiry)}</td><td data-l="Vehicle">${esc(veh[d.id] || '—')}</td><td data-l="Employment"><span class="badge ${d.employmentStatus === 'Active' ? 's-ok' : d.employmentStatus === 'On leave' ? 's-wn' : 's-bd'}">${esc(d.employmentStatus)}</span></td><td data-l="App access"><span class="badge ${pending.has(d.emailLower) ? 's-wn' : 's-ok'}">${pending.has(d.emailLower) ? 'Awaiting registration' : 'Registered'}</span></td><td><div class="act">${pending.has(d.emailLower) && can('drivers', 'write') ? `<button class="btn sm ghost" data-pin="${d.id}" title="Show / reset registration PIN"><i class="fa-solid fa-key"></i></button>` : ''}${can('drivers', 'write') ? `<button class="btn sm ghost" data-e="${d.id}" aria-label="Edit"><i class="fa-solid fa-pen"></i></button>` : ''}${can('drivers', 'del') ? `<button class="btn sm red" data-d="${d.id}" aria-label="Delete"><i class="fa-solid fa-trash"></i></button>` : ''}</div></td></tr>`).join('') : `<tr><td colspan="9"><div class="empty"><i class="fa-solid fa-id-card"></i>No drivers registered yet.<br>Register a driver to give them access to the Driver app.</div></td></tr>`}</tbody></table></div></div>`;
-  if ($('#da')) $('#da').onclick = () => driverForm();
-  $('#dq').oninput = e => { const q = e.target.value.toLowerCase(); document.querySelectorAll('#db tr').forEach(t => t.classList.toggle('hidden', !t.textContent.toLowerCase().includes(q))); };
-  document.querySelectorAll('[data-e]').forEach(b => b.onclick = () => driverForm(rows.find(r => r.id === b.dataset.e)));
-  document.querySelectorAll('[data-pin]').forEach(b => b.onclick = () => resetPin(rows.find(r => r.id === b.dataset.pin)));
-  document.querySelectorAll('[data-d]').forEach(b => b.onclick = () => deleteDriver(rows.find(r => r.id === b.dataset.d)));
-}
-function pinModal(d, pin) {
-  const msg = `Hello ${d.fullName}, you have been registered as a driver. Open ${driverLink()} then tap "New driver? Register here". Use your email ${d.email} and registration PIN ${pin}.`;
-  const m = modal(`<h2><i class="fa-solid fa-key" style="color:var(--b3)"></i>Give the driver this PIN</h2><div class="msg ok" style="text-align:center"><div style="font-size:12px;font-weight:700">REGISTRATION PIN FOR ${esc(d.fullName.toUpperCase())}</div><div style="font-size:38px;font-weight:800;letter-spacing:.2em;margin:6px 0">${pin}</div></div><p style="color:var(--mut);line-height:1.6">The driver opens the Driver app, taps <b>New driver? Register here</b>, and enters <b>${esc(d.email)}</b>, this PIN and a password. The PIN works once.</p><div class="mf" style="justify-content:space-between;flex-wrap:wrap"><button class="btn ghost" id="pc"><i class="fa-regular fa-copy"></i>Copy message</button><a class="btn" style="text-decoration:none;background:#16A34A" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(msg)}"><i class="fa-brands fa-whatsapp"></i>Send on WhatsApp</a><button class="btn ghost" id="pd">Done</button></div>`);
-  $('#pd').onclick = closeModal; $('#pc').onclick = async () => { try { await navigator.clipboard.writeText(msg); toast('Copied.'); } catch (e) { toast('Copy failed. Select and copy the PIN manually.', 'err'); } };
-}
-async function resetPin(d) { try { const pin = newPin(); await setDoc(doc(db, 'driverSecrets', d.emailLower), { pin, driverId: d.id, updatedAt: serverTimestamp() }); await audit('RESET_DRIVER_PIN', 'driver', d.id, { driver: { from: null, to: d.fullName } }); pinModal(d, pin); } catch (e) { toast(errMsg(e), 'err'); } }
-async function deleteDriver(d) {
-  if (!await ask('Delete driver?', `${d.fullName} will be removed and can no longer use the Driver app. This cannot be undone.`, 'Delete', true)) return;
-  try {
-    const b = writeBatch(db); b.delete(doc(db, 'drivers', d.id)); b.delete(doc(db, 'driverInvites', d.emailLower)); b.delete(doc(db, 'driverSecrets', d.emailLower));
-    const vs = await getDocs(query(vcol, where('driverId', '==', d.id))); vs.forEach(v => b.update(v.ref, { driverId: '', driverName: '' })); await b.commit();
-    const us = await getDocs(query(collection(db, 'users'), where('driverId', '==', d.id))); for (const u of us.docs) await updateDoc(u.ref, { active: false });
-    await audit('DELETE_DRIVER', 'driver', d.id, { driver: { from: d.fullName, to: null } }); toast('Driver deleted and app access removed.'); viewDrivers();
-  } catch (e) { toast(errMsg(e), 'err'); }
-}
-async function driverForm(d) {
-  const vs = await getDocs(query(vcol, orderBy('fleetId'), limit(300))), vehicles = vs.docs.map(v => ({ id: v.id, ...v.data() })).filter(v => !v.driverId || (d && v.driverId === d.id)), cur = d ? (vehicles.find(v => v.driverId === d.id) || {}).id || '' : '';
-  const x = d || { employmentStatus: 'Active', licenceClass: LCLASS[0] };
-  modal(`<h2><i class="fa-solid fa-id-card" style="color:var(--b3)"></i>${d ? 'Edit driver' : 'Register driver'}</h2><div id="de"></div><form id="df" novalidate><div class="fg">
-  ${field('user', 'Full name *', 'fullName', x.fullName)}${field('hashtag', 'Employee ID *', 'employeeId', x.employeeId)}${field('phone', 'Phone *', 'phone', x.phone, 'tel')}${field('envelope', 'Email * (used to log in)', 'email', x.email, 'email', d ? 'readonly' : '')}
-  ${field('location-dot', 'Home address', 'address', x.address, 'text', 'full')}${field('address-card', 'National ID', 'nationalId', x.nationalId)}${field('passport', 'Passport number', 'passportNo', x.passportNo)}
-  ${field('id-badge', 'Driver licence no. *', 'licenceNo', x.licenceNo)}${selectF('layer-group', 'Licence class', 'licenceClass', LCLASS, x.licenceClass)}${field('calendar-xmark', 'Licence expiry *', 'licenceExpiry', x.licenceExpiry, 'date')}${field('notes-medical', 'Medical certificate expiry', 'medicalExpiry', x.medicalExpiry, 'date')}
-  ${field('user-shield', 'Emergency contact name', 'emergencyName', x.emergencyName)}${field('phone-volume', 'Emergency contact phone', 'emergencyPhone', x.emergencyPhone, 'tel')}${selectF('briefcase', 'Employment status', 'employmentStatus', EMP, x.employmentStatus)}
-  <div class="f"><i class="fa-solid fa-truck"></i><div><label>Assigned vehicle</label><select name="vehicleId"><option value="">— None —</option>${vehicles.map(v => `<option value="${esc(v.id)}" ${v.id === cur ? 'selected' : ''}>${esc(v.registration)} (${esc(v.fleetId)})</option>`).join('')}</select></div></div>
-  <div class="f full"><i class="fa-solid fa-note-sticky"></i><div><label>Notes</label><textarea name="notes">${esc(x.notes || '')}</textarea></div></div></div><div class="mf"><button type="button" class="btn ghost" id="dx">Cancel</button><button class="btn" id="ds"><i class="fa-solid fa-floppy-disk"></i>${d ? 'Save changes' : 'Register driver'}</button></div></form>`, true);
-  $('#dx').onclick = closeModal;
-  $('#df').onsubmit = async e => {
-    e.preventDefault(); const f = new FormData(e.target), g = k => (f.get(k) || '').toString().trim(), em = g('email').toLowerCase();
-    const r = { fullName: g('fullName'), employeeId: g('employeeId'), phone: g('phone'), email: em, emailLower: em, address: g('address'), nationalId: g('nationalId'), passportNo: g('passportNo'), licenceNo: g('licenceNo'), licenceClass: g('licenceClass'), licenceExpiry: g('licenceExpiry'), medicalExpiry: g('medicalExpiry'), emergencyName: g('emergencyName'), emergencyPhone: g('emergencyPhone'), employmentStatus: g('employmentStatus'), notes: g('notes') }, er = [];
-    if (r.fullName.length < 2) er.push('Full name is required.'); if (!r.employeeId) er.push('Employee ID is required.'); if (!/^[+0-9 ()-]{7,20}$/.test(r.phone)) er.push('Enter a valid phone number.'); if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) er.push('Enter a valid email address.'); if (!r.licenceNo) er.push('Licence number is required.');
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(r.licenceExpiry)) er.push('Licence expiry date is required.'); if (r.medicalExpiry && !/^\d{4}-\d{2}-\d{2}$/.test(r.medicalExpiry)) er.push('Medical expiry is not a valid date.'); if (r.emergencyPhone && !/^[+0-9 ()-]{7,20}$/.test(r.emergencyPhone)) er.push('Emergency phone is not valid.');
-    if (er.length) { $('#de').innerHTML = `<div class="msg err">${er.map(esc).join('<br>')}</div>`; return; } $('#ds').disabled = true;
-    try {
-      for (const [k, l] of [['emailLower', 'email'], ['employeeId', 'employee ID']]) { const dup = await getDocs(query(dcol, where(k, '==', r[k]), limit(2))); if (dup.docs.some(z => z.id !== (d && d.id))) throw { message: `A driver with this ${l} already exists.` }; }
-      const nv = g('vehicleId'), b = writeBatch(db); let id = d && d.id, pin = null;
-      if (d) { b.update(doc(db, 'drivers', id), { ...r, updatedAt: serverTimestamp(), updatedBy: S.user.uid }); }
-      else { const ref = doc(dcol); id = ref.id; pin = newPin(); b.set(ref, { ...r, createdAt: serverTimestamp(), createdBy: S.user.uid }); b.set(doc(db, 'driverInvites', em), { email: em, driverId: id, claimed: false, createdAt: serverTimestamp(), createdBy: S.user.uid }); b.set(doc(db, 'driverSecrets', em), { pin, driverId: id, createdAt: serverTimestamp() }); }
-      if (nv !== cur) { if (cur) b.update(doc(db, 'vehicles', cur), { driverId: '', driverName: '', updatedAt: serverTimestamp(), updatedBy: S.user.uid }); if (nv) b.update(doc(db, 'vehicles', nv), { driverId: id, driverName: r.fullName, updatedAt: serverTimestamp(), updatedBy: S.user.uid }); }
-      await b.commit();
-      if (d) { const us = await getDocs(query(collection(db, 'users'), where('driverId', '==', id))); const on = r.employmentStatus === 'Active' || r.employmentStatus === 'On leave'; for (const u of us.docs) { try { await updateDoc(u.ref, { active: on, name: r.fullName, phone: r.phone }); } catch (e2) {} } }
-      await audit(d ? 'UPDATE_DRIVER' : 'REGISTER_DRIVER', 'driver', id, d ? { ...diffObj(d, r), driver: r.fullName } : { driver: { from: null, to: r.fullName } });
-      closeModal(); viewDrivers(); if (pin) pinModal({ ...r, id }, pin); else toast('Driver updated.');
-    } catch (er2) { $('#de').innerHTML = `<div class="msg err">${esc(errMsg(er2))}</div>`; $('#ds').disabled = false; }
-  };
-}
-
-/* ============ SYSTEM CHECK ============ */
-async function viewHealth() {
-  const T = [
-    ['Internet connection', async () => { if (!navigator.onLine) throw { message: 'No connection.' }; }, 'Connect to the internet.'],
-    ['Your email is verified', async () => { if (!S.user.emailVerified) throw { message: 'Not verified.' }; }, 'Open the verification link in your email.'],
-    ['Read staff (users)', () => getDocs(query(collection(db, 'users'), limit(1))), 'Publish firestore.rules in Firebase → Firestore → Rules.'],
-    ['Read vehicles', () => getDocs(query(vcol, limit(1))), 'Publish firestore.rules.'],
-    ['Read drivers', () => getDocs(query(dcol, limit(1))), 'Publish the latest firestore.rules.'],
-    ['Read driver registrations', () => getDocs(query(collection(db, 'driverInvites'), limit(1))), 'Publish the latest firestore.rules.'],
-    ['Read live GPS', () => getDocs(query(gcol, limit(1))), 'Publish the latest firestore.rules.'],
-    ['Write audit log', () => audit('SYSTEM_CHECK', 'system', ''), 'Publish firestore.rules (auditLogs create rule).'],
-    ['Route-history index', () => getDocs(query(collection(db, 'gpsPositions'), where('vehicleId', '==', '__check'), where('ts', '>=', Timestamp.fromMillis(0)), orderBy('ts'), limit(1))), 'Open the link shown in the error to create the index, wait 2 minutes, run again.'],
-    ['Map library loaded', async () => { if (typeof L === 'undefined') throw { message: 'Leaflet did not load.' }; }, 'Check the internet connection and reload.'],
-    ['Browser supports GPS', async () => { if (!('geolocation' in navigator)) throw { message: 'No GPS support.' }; }, 'Use Chrome or Safari on a phone.']
-  ];
-  $('#view').innerHTML = `<div class="card"><h3><i class="fa-solid fa-stethoscope" style="color:var(--b3)"></i>System check</h3><div id="hl">${T.map((t, i) => `<div style="display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-top:1px solid var(--line)" id="h${i}"><i class="fa-solid fa-circle-notch fa-spin" style="margin-top:3px;color:var(--mut)"></i><div><b>${t[0]}</b></div></div>`).join('')}</div></div><div class="card" style="margin-top:16px"><h3><i class="fa-solid fa-list-check" style="color:var(--b3)"></i>One-time Firebase setup</h3><ol style="line-height:1.9;padding-left:20px;color:var(--mut)"><li>Authentication → Sign-in method → turn on <b>Email/Password</b>.</li><li>Authentication → Settings → Authorized domains → add the address you host this on.</li><li>Firestore Database → Rules → paste <b>firestore.rules</b> → Publish.</li><li>Upload <b>index.html</b> and <b>fleet-driver.html</b> to the same folder on your host.</li></ol></div>`;
-  for (let i = 0; i < T.length; i++) { const el = $('#h' + i); try { await T[i][1](); el.innerHTML = `<i class="fa-solid fa-circle-check" style="margin-top:3px;color:var(--ok)"></i><div><b>${T[i][0]}</b></div>`; } catch (e) { el.innerHTML = `<i class="fa-solid fa-circle-xmark" style="margin-top:3px;color:var(--bad)"></i><div><b>${T[i][0]}</b><div style="color:var(--bad);font-size:12.5px;word-break:break-word">${esc((e && (e.message || e.code)) || 'Failed')}</div><div style="color:var(--mut);font-size:12.5px">Fix: ${T[i][2]}</div></div>`; } }
-}
-
-/* ============ ROADMAP ============ */
-async function viewRoadmap() {
-  const R = [['Authentication, email verification, roles, staff, audit log', 'Built', 's-ok'], ['Fleet management (vehicles, documents, status)', 'Built', 's-ok'], ['Driver registration and full driver profiles', 'Built', 's-ok'], ['Trailers, customers', 'Phase 2', 's-bl'], ['Trips, cargo, border events', 'Phase 2', 's-bl'], ['Fuel, maintenance, expenses, profitability', 'Phase 3', 's-bl'], ['Documents upload (ImageKit), reports, CSV and PDF', 'Phase 3', 's-bl'], ['Live GPS from driver phones + live map + route history', 'Built', 's-ok'], ['GPS hardware trackers (Worker), geofences, speed alerts', 'Phase 4', 's-wn'], ['Push, email and SMS alerts', 'Phase 4', 's-wn']];
-  const X = [['GPS trackers or telematics API', 'Needed for live positions. No positions are shown until a real device reports.'], ['Cloudflare Worker (free)', 'Receives GPS data and sends alerts, since Cloud Functions are not used.'], ['ImageKit', 'Stores documents and receipts.'], ['Email / SMS provider', 'Only needed for alerts outside the app.']];
-  $('#view').innerHTML = `<div class="grid two"><div class="card"><h3><i class="fa-solid fa-list-check" style="color:var(--b3)"></i>Development phases</h3>${R.map(r => `<div style="display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line)"><span>${r[0]}</span><span class="badge ${r[2]}">${r[1]}</span></div>`).join('')}</div><div class="card"><h3><i class="fa-solid fa-plug" style="color:var(--b3)"></i>External services required</h3>${X.map(r => `<div style="padding:10px 0;border-top:1px solid var(--line)"><b>${r[0]}</b><div style="color:var(--mut);margin-top:2px">${r[1]}</div></div>`).join('')}</div></div>`;
-}
+setInterval(() => { if (T.on) paint(); }, 20000);
 </script>
 </body>
 </html>
